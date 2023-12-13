@@ -1,35 +1,24 @@
-import { Grid, Box, Paper } from "@mui/material";
-import { styled } from "@mui/material/styles";
 import "./App.css";
-import Navbar from "./components/Navbar";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import HomePage from "./pages/Home";
+import SearchPage from "./pages/Search";
+import LibraryPage from "./pages/Library";
+import RootLayout from "./pages/Root";
+import ErrorPage from "./pages/Error";
 
-function App() {
-  const Item = styled(Paper)(({ theme }) => ({
-    backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
-    ...theme.typography.body2,
-    padding: theme.spacing(5),
-    textAlign: "center",
-    color: theme.palette.text.secondary,
-  }));
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <RootLayout />,
+    errorElement: <ErrorPage />,
+    children: [
+      { path: "", element: <HomePage /> },
+      { path: "search", element: <SearchPage /> },
+      { path: "library", element: <LibraryPage /> },
+    ],
+  },
+]);
 
-  return (
-    <>
-      <Navbar />
-
-      <Box sx={{ flexGrow: 1 }}>
-        <Grid
-          container
-          direction="row"
-          justifyContent="center"
-          alignItems="center"
-        >
-          <Grid item xs={10}>
-            <Item>Music Player</Item>
-          </Grid>
-        </Grid>
-      </Box>
-    </>
-  );
+export default function App() {
+  return <RouterProvider router={router} />;
 }
-
-export default App;
