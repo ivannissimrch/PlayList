@@ -1,10 +1,27 @@
-import { Box, Card, CardContent, Typography } from "@mui/material";
-import IconButton from "@mui/material/IconButton";
-import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
-import PlayArrowIcon from "@mui/icons-material/PlayArrow";
-import SkipNextIcon from "@mui/icons-material/SkipNext";
+import { Box } from "@mui/material";
+import { useEffect, useState } from "react";
+import getTokenFromUrl from "../helpers/getToken";
+import SpotifyWebApi from "spotify-web-api-js";
+const spotifyApi = new SpotifyWebApi();
+import Login from "../components/Login";
+import MusicPlayer from "../components/MusicPlayer";
 
 export default function HomePage() {
+  const [spotifyToken, setSpotifyToken] = useState("");
+  const [loggedIn, setLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const spotifyToken = getTokenFromUrl().access_token;
+    window.location.hash = ";";
+
+    if (spotifyToken) {
+      setSpotifyToken(spotifyToken);
+      spotifyApi.setAccessToken(spotifyToken);
+      spotifyApi.getMe();
+      setLoggedIn(true);
+    }
+  }, []);
+
   return (
     <Box
       display="flex"
@@ -12,39 +29,8 @@ export default function HomePage() {
       justifyContent="center"
       minHeight={500}
     >
-      <Card sx={{ display: "flex" }}>
-        <Box sx={{ display: "flex", flexDirection: "column" }}>
-          <CardContent sx={{ flex: "1 0 auto" }}>
-            <Typography component="div" variant="h5">
-              Live From Space
-            </Typography>
-            <Typography
-              variant="subtitle1"
-              color="text.secondary"
-              component="div"
-            >
-              Mac Miller
-            </Typography>
-          </CardContent>
-          <Box sx={{ display: "flex", alignItems: "center", pl: 1, pb: 1 }}>
-            <IconButton aria-label="previous">
-              <SkipPreviousIcon />
-            </IconButton>
-            <IconButton aria-label="play/pause">
-              <PlayArrowIcon sx={{ height: 38, width: 38 }} />
-            </IconButton>
-            <IconButton aria-label="next">
-              <SkipNextIcon />
-            </IconButton>
-          </Box>
-        </Box>
-        {/* <CardMedia
-          component="img"
-          sx={{ width: 151 }}
-          image="https://www.pexels.com/photo/bridge-near-waterfall-358457"
-          alt="Live from space album cover"
-        /> */}
-      </Card>
+      {!loggedIn && <Login />}
+      {spotifyToken && <MusicPlayer />}
     </Box>
   );
 }
