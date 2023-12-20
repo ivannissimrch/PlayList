@@ -6,12 +6,14 @@ import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import SkipNextIcon from "@mui/icons-material/SkipNext";
 import SpotifyWebApi from "spotify-web-api-js";
 const spotifyApi = new SpotifyWebApi();
+import PropTypes from "prop-types";
 
-function MusicPlayer() {
+function MusicPlayer({ token }) {
   const [nowPlaying, setNowPlaying] = useState({});
 
   const getNowPlaying = () => {
     spotifyApi.getMyCurrentPlaybackState().then((response) => {
+      console.log(response);
       setNowPlaying({
         name: response.item.name,
         artist: response.item.artists[0].name,
@@ -20,7 +22,46 @@ function MusicPlayer() {
     });
   };
 
-  useEffect(getNowPlaying, [nowPlaying]);
+  async function pause() {
+    const response = await fetch("https://api.spotify.com/v1/me/player/pause", {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    // Awaiting response.json()
+    const resData = await response.json();
+    return resData;
+  }
+
+  async function nextSong() {
+    const response = await fetch("https://api.spotify.com/v1/me/player/next", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    // Awaiting response.json()
+    const resData = await response.json();
+    return resData;
+  }
+
+  async function previousSong() {
+    const response = await fetch(
+      "https://api.spotify.com/v1/me/player/previous",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    // Awaiting response.json()
+    const resData = await response.json();
+    return resData;
+  }
+
+  useEffect(getNowPlaying, []);
 
   return (
     <Card sx={{ display: "flex" }}>
@@ -38,13 +79,13 @@ function MusicPlayer() {
           </Typography>
         </CardContent>
         <Box sx={{ display: "flex", alignItems: "center", pl: 1, pb: 1 }}>
-          <IconButton aria-label="previous">
+          <IconButton aria-label="previous" onClick={previousSong}>
             <SkipPreviousIcon />
           </IconButton>
-          <IconButton aria-label="play/pause">
+          <IconButton aria-label="play/pause" onClick={pause}>
             <PlayArrowIcon sx={{ height: 38, width: 38 }} />
           </IconButton>
-          <IconButton aria-label="next">
+          <IconButton aria-label="next" onClick={nextSong}>
             <SkipNextIcon />
           </IconButton>
         </Box>
@@ -58,5 +99,10 @@ function MusicPlayer() {
     </Card>
   );
 }
+
+//propTypes
+MusicPlayer.propTypes = {
+  token: PropTypes.string.isRequired,
+};
 
 export default MusicPlayer;

@@ -13,7 +13,6 @@ export default function HomePage() {
   useEffect(() => {
     const spotifyToken = getTokenFromUrl().access_token;
     window.location.hash = ";";
-
     if (spotifyToken) {
       setSpotifyToken(spotifyToken);
       spotifyApi.setAccessToken(spotifyToken);
@@ -30,7 +29,7 @@ export default function HomePage() {
       minHeight={500}
     >
       {!loggedIn && <Login />}
-      {spotifyToken && <MusicPlayer />}
+      {loggedIn && <MusicPlayer token={spotifyToken} />}
     </Box>
   );
 }
