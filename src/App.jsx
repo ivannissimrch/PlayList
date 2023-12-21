@@ -6,19 +6,44 @@ import LibraryPage from "./pages/Library";
 import RootLayout from "./pages/Root";
 import ErrorPage from "./pages/Error";
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <RootLayout />,
-    errorElement: <ErrorPage />,
-    children: [
-      { path: "", element: <HomePage /> },
-      { path: "search", element: <SearchPage /> },
-      { path: "library", element: <LibraryPage /> },
-    ],
-  },
-]);
+import { useEffect, useState } from "react";
+import getTokenFromUrl from "./helpers/getToken";
+import SpotifyWebApi from "spotify-web-api-js";
+const spotifyApi = new SpotifyWebApi();
+import Login from "./components/Login";
 
 export default function App() {
+  const [spotifyToken, setSpotifyToken] = useState("");
+
+  useEffect(() => {
+    const spotifyToken = getTokenFromUrl().access_token;
+    window.location.hash = ";";
+    if (spotifyToken) {
+      setSpotifyToken(spotifyToken);
+      spotifyApi.setAccessToken(spotifyToken);
+      spotifyApi.getMe();
+    }
+  }, []);
+
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <RootLayout />,
+      errorElement: <ErrorPage />,
+      children: [
+        {
+          path: "",
+          element: !spotifyToken ? (
+            <Login />
+          ) : (
+            <HomePage spotifyToken={spotifyToken} />
+          ),
+        },
+        { path: "search", element: <SearchPage /> },
+        { path: "library", element: <LibraryPage /> },
+      ],
+    },
+  ]);
+
   return <RouterProvider router={router} />;
 }

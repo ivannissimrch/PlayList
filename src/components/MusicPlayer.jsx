@@ -61,7 +61,7 @@ function MusicPlayer({ token }) {
     return resData;
   }
 
-  useEffect(getNowPlaying, []);
+  useEffect(getNowPlaying, [nowPlaying]);
 
   return (
     <Card sx={{ display: "flex" }}>
