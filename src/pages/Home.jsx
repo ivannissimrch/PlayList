@@ -1,26 +1,9 @@
 import { Box } from "@mui/material";
-import { useEffect, useState } from "react";
-import getTokenFromUrl from "../helpers/getToken";
-import SpotifyWebApi from "spotify-web-api-js";
-const spotifyApi = new SpotifyWebApi();
-import Login from "../components/Login";
 import MusicPlayer from "../components/MusicPlayer";
+import PropTypes from "prop-types";
 
-export default function HomePage() {
-  const [spotifyToken, setSpotifyToken] = useState("");
-  const [loggedIn, setLoggedIn] = useState(false);
-
-  useEffect(() => {
-    const spotifyToken = getTokenFromUrl().access_token;
-    window.location.hash = ";";
-    if (spotifyToken) {
-      setSpotifyToken(spotifyToken);
-      spotifyApi.setAccessToken(spotifyToken);
-      spotifyApi.getMe();
-      setLoggedIn(true);
-    }
-  }, []);
-
+export default function HomePage({ spotifyToken }) {
+  console.log(spotifyToken);
   return (
     <Box
       display="flex"
@@ -28,8 +11,11 @@ export default function HomePage() {
       justifyContent="center"
       minHeight={500}
     >
-      {!loggedIn && <Login />}
-      {loggedIn && <MusicPlayer token={spotifyToken} />}
+      <MusicPlayer token={spotifyToken} />
     </Box>
   );
 }
+//propTypes
+HomePage.propTypes = {
+  spotifyToken: PropTypes.string.isRequired,
+};
