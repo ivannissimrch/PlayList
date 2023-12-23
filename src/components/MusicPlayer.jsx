@@ -3,6 +3,7 @@ import { Box, Card, CardContent, Typography, CardMedia } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import PauseIcon from "@mui/icons-material/Pause";
 import SkipNextIcon from "@mui/icons-material/SkipNext";
 import SpotifyWebApi from "spotify-web-api-js";
 const spotifyApi = new SpotifyWebApi();
@@ -10,10 +11,11 @@ import PropTypes from "prop-types";
 
 function MusicPlayer({ token }) {
   const [nowPlaying, setNowPlaying] = useState({});
+  const [isPlaying, setIsPlaying] = useState(false);
 
   const getNowPlaying = () => {
     spotifyApi.getMyCurrentPlaybackState().then((response) => {
-      console.log(response);
+      setIsPlaying(response.is_playing);
       setNowPlaying({
         name: response.item.name,
         artist: response.item.artists[0].name,
@@ -21,6 +23,18 @@ function MusicPlayer({ token }) {
       });
     });
   };
+
+  async function startPlayBack() {
+    const response = await fetch("https://api.spotify.com/v1/me/player/play", {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    // Awaiting response.json()
+    const resData = await response.json();
+    return resData;
+  }
 
   async function pause() {
     const response = await fetch("https://api.spotify.com/v1/me/player/pause", {
@@ -82,9 +96,16 @@ function MusicPlayer({ token }) {
           <IconButton aria-label="previous" onClick={previousSong}>
             <SkipPreviousIcon />
           </IconButton>
-          <IconButton aria-label="play/pause" onClick={pause}>
-            <PlayArrowIcon sx={{ height: 38, width: 38 }} />
-          </IconButton>
+          {!isPlaying && (
+            <IconButton aria-label="play" onClick={startPlayBack}>
+              <PlayArrowIcon sx={{ height: 38, width: 38 }} />
+            </IconButton>
+          )}
+          {isPlaying && (
+            <IconButton aria-label="pause" onClick={pause}>
+              <PauseIcon sx={{ height: 38, width: 38 }} />
+            </IconButton>
+          )}
           <IconButton aria-label="next" onClick={nextSong}>
             <SkipNextIcon />
           </IconButton>
