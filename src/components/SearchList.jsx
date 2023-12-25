@@ -5,10 +5,16 @@ import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
 import PropTypes from "prop-types";
+import { useNavigate } from "react-router-dom";
+import playSelectedSong from "../helpers/playSelectedSong";
 
-export default function SearchList({ searchResults }) {
+export default function SearchList({ searchResults, token }) {
+  const navigate = useNavigate();
+
   function handleOnClick(value) {
-    console.log(value);
+    console.log(value.uri);
+    playSelectedSong("play", "PUT", token, value.uri);
+    navigate("/");
   }
 
   return (
@@ -35,4 +41,5 @@ export default function SearchList({ searchResults }) {
 
 SearchList.propTypes = {
   searchResults: PropTypes.object.isRequired,
+  token: PropTypes.string.isRequired,
 };

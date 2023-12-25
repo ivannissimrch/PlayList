@@ -8,7 +8,7 @@ import SkipNextIcon from "@mui/icons-material/SkipNext";
 import SpotifyWebApi from "spotify-web-api-js";
 const spotifyApi = new SpotifyWebApi();
 import PropTypes from "prop-types";
-import makeSpotifyRequest from "../helpers/makeSpotifyRequest";
+import spotifyPlayerRequest from "../helpers/spotifyPlayerRequest";
 
 function MusicPlayer({ token }) {
   const [nowPlaying, setNowPlaying] = useState({});
@@ -26,19 +26,19 @@ function MusicPlayer({ token }) {
   };
 
   async function startPlayBack() {
-    await makeSpotifyRequest("play", "PUT", token);
+    await spotifyPlayerRequest("play", "PUT", token);
   }
 
   async function pause() {
-    await makeSpotifyRequest("pause", "PUT", token);
+    await spotifyPlayerRequest("pause", "PUT", token);
   }
 
   async function nextSong() {
-    await makeSpotifyRequest("next", "POST", token);
+    await spotifyPlayerRequest("next", "POST", token);
   }
 
   async function previousSong() {
-    await makeSpotifyRequest("previous", "POST", token);
+    await spotifyPlayerRequest("previous", "POST", token);
   }
 
   useEffect(getNowPlaying, [nowPlaying]);

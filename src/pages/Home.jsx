@@ -11,7 +11,7 @@ export default function HomePage({ token }) {
       justifyContent="center"
       minHeight={500}
     >
-      {token && <MusicPlayer token={token} />};
+      {token && <MusicPlayer token={token} />}
     </Box>
   );
 }

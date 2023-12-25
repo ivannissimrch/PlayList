@@ -72,7 +72,9 @@ export default function SearchPage({ token }) {
           alignItems: "flex-start",
         }}
       >
-        {searchResults && <SearchList searchResults={searchResults} />}
+        {searchResults && (
+          <SearchList searchResults={searchResults} token={token} />
+        )}
       </Container>
     </Container>
   );
