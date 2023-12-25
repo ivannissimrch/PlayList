@@ -2,8 +2,8 @@ import { Box } from "@mui/material";
 import MusicPlayer from "../components/MusicPlayer";
 import PropTypes from "prop-types";
 
-export default function HomePage({ spotifyToken }) {
-  console.log(spotifyToken);
+export default function HomePage({ token }) {
+  console.log(token);
   return (
     <Box
       display="flex"
@@ -11,11 +11,11 @@ export default function HomePage({ spotifyToken }) {
       justifyContent="center"
       minHeight={500}
     >
-      {spotifyToken && <MusicPlayer token={spotifyToken} />};
+      {token && <MusicPlayer token={token} />};
     </Box>
   );
 }
 //propTypes
 HomePage.propTypes = {
-  spotifyToken: PropTypes.string.isRequired,
+  token: PropTypes.string.isRequired,
 };

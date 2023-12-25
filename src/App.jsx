@@ -36,13 +36,13 @@ export default function App() {
           element: !spotifyToken ? (
             <Login />
           ) : (
-            <HomePage spotifyToken={spotifyToken} />
+            <HomePage token={spotifyToken} />
           ),
         },
-        { path: "search", element: <SearchPage spotifyToken={spotifyToken} /> },
+        { path: "search", element: <SearchPage token={spotifyToken} /> },
         {
           path: "library",
-          element: <LibraryPage spotifyToken={spotifyToken} />,
+          element: <LibraryPage token={spotifyToken} />,
         },
       ],
     },
