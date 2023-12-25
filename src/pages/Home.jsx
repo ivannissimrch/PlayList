@@ -11,7 +11,7 @@ export default function HomePage({ spotifyToken }) {
       justifyContent="center"
       minHeight={500}
     >
-      <MusicPlayer token={spotifyToken} />
+      {spotifyToken && <MusicPlayer token={spotifyToken} />};
     </Box>
   );
 }

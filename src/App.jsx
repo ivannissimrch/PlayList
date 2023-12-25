@@ -39,8 +39,11 @@ export default function App() {
             <HomePage spotifyToken={spotifyToken} />
           ),
         },
-        { path: "search", element: <SearchPage /> },
-        { path: "library", element: <LibraryPage /> },
+        { path: "search", element: <SearchPage spotifyToken={spotifyToken} /> },
+        {
+          path: "library",
+          element: <LibraryPage spotifyToken={spotifyToken} />,
+        },
       ],
     },
   ]);

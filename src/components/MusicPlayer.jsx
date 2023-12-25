@@ -8,6 +8,7 @@ import SkipNextIcon from "@mui/icons-material/SkipNext";
 import SpotifyWebApi from "spotify-web-api-js";
 const spotifyApi = new SpotifyWebApi();
 import PropTypes from "prop-types";
+import makeSpotifyRequest from "../helpers/makeSpotifyRequest";
 
 function MusicPlayer({ token }) {
   const [nowPlaying, setNowPlaying] = useState({});
@@ -25,54 +26,19 @@ function MusicPlayer({ token }) {
   };
 
   async function startPlayBack() {
-    const response = await fetch("https://api.spotify.com/v1/me/player/play", {
-      method: "PUT",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    // Awaiting response.json()
-    const resData = await response.json();
-    return resData;
+    await makeSpotifyRequest("play", "PUT", token);
   }
 
   async function pause() {
-    const response = await fetch("https://api.spotify.com/v1/me/player/pause", {
-      method: "PUT",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    // Awaiting response.json()
-    const resData = await response.json();
-    return resData;
+    await makeSpotifyRequest("pause", "PUT", token);
   }
 
   async function nextSong() {
-    const response = await fetch("https://api.spotify.com/v1/me/player/next", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    // Awaiting response.json()
-    const resData = await response.json();
-    return resData;
+    await makeSpotifyRequest("next", "POST", token);
   }
 
   async function previousSong() {
-    const response = await fetch(
-      "https://api.spotify.com/v1/me/player/previous",
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    // Awaiting response.json()
-    const resData = await response.json();
-    return resData;
+    await makeSpotifyRequest("previous", "POST", token);
   }
 
   useEffect(getNowPlaying, [nowPlaying]);
