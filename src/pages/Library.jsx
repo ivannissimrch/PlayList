@@ -1,31 +1,47 @@
-import Stack from "@mui/material/Stack";
-import Paper from "@mui/material/Paper";
-import { styled } from "@mui/material/styles";
+import { useLoaderData } from "react-router-dom";
+import { Container } from "@mui/material";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
+import Typography from "@mui/material/Typography";
+import { CardActionArea } from "@mui/material";
 
 export default function LibraryPage() {
-  const DemoPaper = styled(Paper)(({ theme }) => ({
-    width: 120,
-    height: 120,
-    padding: theme.spacing(2),
-    ...theme.typography.body2,
-    textAlign: "center",
-  }));
+  const lists = useLoaderData();
+  console.log(lists);
+
   return (
-    <Stack
-      direction="row"
-      flexWrap="wrap"
+    <Container
       sx={{
-        p: "2px 4px",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        width: "98%",
+        direction: "row",
+        flexWrap: "wrap",
       }}
     >
-      <DemoPaper square>PlayList 1</DemoPaper>
-      <DemoPaper square>PlayList 2</DemoPaper>
-      <DemoPaper square>PlayList 1</DemoPaper>
-      <DemoPaper square>PlayList 2</DemoPaper>
-    </Stack>
+      {lists.map((list) => {
+        return (
+          <Card sx={{ maxWidth: 345, margin: "10px 10px" }} key={list.id}>
+            <CardActionArea>
+              <CardMedia
+                component="img"
+                height="140"
+                image={list.images[0].url}
+                alt="green iguana"
+              />
+              <CardContent>
+                <Typography gutterBottom variant="h5" component="div">
+                  {list.name}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {list.type}
+                </Typography>
+              </CardContent>
+            </CardActionArea>
+          </Card>
+        );
+      })}
+    </Container>
   );
 }

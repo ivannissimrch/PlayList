@@ -12,7 +12,6 @@ export default function SearchList({ searchResults, token }) {
   const navigate = useNavigate();
 
   function handleOnClick(value) {
-    console.log(value.uri);
     playSelectedSong("play", "PUT", token, value.uri);
     navigate("/");
   }

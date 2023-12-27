@@ -2,7 +2,7 @@ import Paper from "@mui/material/Paper";
 import InputBase from "@mui/material/InputBase";
 import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
-import Container from "@mui/material/Container";
+import { Box, Container } from "@mui/material";
 import PropTypes from "prop-types";
 import { useState } from "react";
 import makeSpotifySearch from "../helpers/makeSpotifySearch";
@@ -27,56 +27,59 @@ export default function SearchPage({ token }) {
     );
     console.log(results);
     setSearchResults(results);
+    setSongToSearch("");
   }
 
   return (
-    <Container
+    <Box
       sx={{
         p: "8px 8px",
         m: "4px 4px",
         display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "flex-start",
+        alignItems: "flex-start",
+        justifyContent: "center",
         width: "100%",
         height: "100vh",
       }}
     >
-      <Paper
-        component="form"
-        sx={{
-          p: "2px 4px",
-          margin: "8px 8px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          width: "100%",
-        }}
-        onSubmit={handleSubmit}
-      >
-        <InputBase
-          sx={{ ml: 1, flex: 1 }}
-          placeholder="Search Song"
-          inputProps={{ "aria-label": "search Song" }}
-          onChange={handleOnChange}
-        />
-        <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
-          <SearchIcon />
-        </IconButton>
-      </Paper>
-      <Container
-        sx={{
-          p: "0px 0px",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "flex-start",
-        }}
-      >
-        {searchResults && (
-          <SearchList searchResults={searchResults} token={token} />
-        )}
+      <Container>
+        <Paper
+          component="form"
+          sx={{
+            p: "2px 4px",
+            margin: "8px 8px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            width: "100%",
+          }}
+          onSubmit={handleSubmit}
+        >
+          <InputBase
+            sx={{ ml: 1, flex: 1 }}
+            placeholder="Search Song"
+            inputProps={{ "aria-label": "search Song" }}
+            onChange={handleOnChange}
+            value={songToSearch}
+          />
+          <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
+            <SearchIcon />
+          </IconButton>
+        </Paper>
+        <Box
+          sx={{
+            p: "0px 0px",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "flex-start",
+          }}
+        >
+          {searchResults && (
+            <SearchList searchResults={searchResults} token={token} />
+          )}
+        </Box>
       </Container>
-    </Container>
+    </Box>
   );
 }
 

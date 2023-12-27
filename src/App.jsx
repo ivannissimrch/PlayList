@@ -1,10 +1,10 @@
-import "./App.css";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import HomePage from "./pages/Home";
 import SearchPage from "./pages/Search";
 import LibraryPage from "./pages/Library";
 import RootLayout from "./pages/Root";
 import ErrorPage from "./pages/Error";
+import getPlayList from "./helpers/getPlayList";
 
 import { useEffect, useState } from "react";
 import getTokenFromUrl from "./helpers/getToken";
@@ -42,6 +42,7 @@ export default function App() {
         { path: "search", element: <SearchPage token={spotifyToken} /> },
         {
           path: "library",
+          loader: () => getPlayList(spotifyToken),
           element: <LibraryPage token={spotifyToken} />,
         },
       ],
