@@ -5,12 +5,13 @@ import LibraryPage from "./pages/Library";
 import RootLayout from "./pages/Root";
 import ErrorPage from "./pages/Error";
 import getPlayList from "./helpers/getPlayList";
-
+import PlayListPage from "./pages/PlayListPage";
 import { useEffect, useState } from "react";
 import getTokenFromUrl from "./helpers/getToken";
 import SpotifyWebApi from "spotify-web-api-js";
 const spotifyApi = new SpotifyWebApi();
 import Login from "./components/Login";
+import getPlayListSongs from "./helpers/getPlayListSongs";
 
 export default function App() {
   const [spotifyToken, setSpotifyToken] = useState("");
@@ -44,6 +45,11 @@ export default function App() {
           path: "library",
           loader: () => getPlayList(spotifyToken),
           element: <LibraryPage token={spotifyToken} />,
+        },
+        {
+          path: "/library/:playlistId",
+          loader: ({ params }) => getPlayListSongs(spotifyToken, params),
+          element: <PlayListPage token={spotifyToken} />,
         },
       ],
     },

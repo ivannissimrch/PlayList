@@ -18,14 +18,11 @@ export default function SearchPage({ token }) {
 
   async function handleSubmit(event) {
     event.preventDefault();
-    console.log("request songs");
-    console.log(songToSearch);
     const results = await makeSpotifySearch(
       `q=remaster%2520track%3ADoxy%2520artist%3A${songToSearch}&type=track`,
       "GET",
       token
     );
-    console.log(results);
     setSearchResults(results);
     setSongToSearch("");
   }

@@ -5,10 +5,15 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { CardActionArea } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 export default function LibraryPage() {
   const lists = useLoaderData();
-  console.log(lists);
+  const navigate = useNavigate();
+
+  function handleOnClick(id) {
+    navigate(`/library/${id}`);
+  }
 
   return (
     <Container
@@ -22,7 +27,11 @@ export default function LibraryPage() {
     >
       {lists.map((list) => {
         return (
-          <Card sx={{ maxWidth: 345, margin: "10px 10px" }} key={list.id}>
+          <Card
+            sx={{ maxWidth: 345, margin: "10px 10px" }}
+            key={list.id}
+            onClick={() => handleOnClick(list.id)}
+          >
             <CardActionArea>
               <CardMedia
                 component="img"
