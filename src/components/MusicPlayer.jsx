@@ -1,5 +1,12 @@
 import { useEffect, useState } from "react";
-import { Box, Card, CardContent, Typography, CardMedia } from "@mui/material";
+import {
+  Box,
+  Card,
+  CardContent,
+  Typography,
+  CardMedia,
+  Tooltip,
+} from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
@@ -9,10 +16,13 @@ import SpotifyWebApi from "spotify-web-api-js";
 const spotifyApi = new SpotifyWebApi();
 import PropTypes from "prop-types";
 import spotifyPlayerRequest from "../helpers/spotifyPlayerRequest";
+import AddIcon from "@mui/icons-material/Add";
+import { useNavigate } from "react-router-dom";
 
 function MusicPlayer({ token }) {
   const [nowPlaying, setNowPlaying] = useState({});
   const [isPlaying, setIsPlaying] = useState(false);
+  const navigate = useNavigate();
 
   const getNowPlaying = () => {
     spotifyApi.getMyCurrentPlaybackState().then((response) => {
@@ -21,9 +31,16 @@ function MusicPlayer({ token }) {
         name: response.item.name,
         artist: response.item.artists[0].name,
         albumCover: response.item.album.images[0].url,
+        songUrl: response.item.uri,
       });
     });
   };
+
+  function addSongTolayList(songToAdd) {
+    navigate("addToPlayList", {
+      state: { songToAdd: songToAdd.songUrl, token: token },
+    });
+  }
 
   async function startPlayBack() {
     await spotifyPlayerRequest("play", "PUT", token);
@@ -76,6 +93,14 @@ function MusicPlayer({ token }) {
             <SkipNextIcon />
           </IconButton>
         </Box>
+        <Tooltip title="Add to Playlist">
+          <IconButton
+            aria-label="previous"
+            onClick={() => addSongTolayList(nowPlaying)}
+          >
+            <AddIcon />
+          </IconButton>
+        </Tooltip>
       </Box>
       <CardMedia
         component="img"

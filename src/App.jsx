@@ -12,6 +12,7 @@ import SpotifyWebApi from "spotify-web-api-js";
 const spotifyApi = new SpotifyWebApi();
 import Login from "./components/Login";
 import getPlayListSongs from "./helpers/getPlayListSongs";
+import AddToPlayList from "./pages/AddToPlayList";
 
 export default function App() {
   const [spotifyToken, setSpotifyToken] = useState("");
@@ -50,6 +51,11 @@ export default function App() {
           path: "/library/:playlistId",
           loader: ({ params }) => getPlayListSongs(spotifyToken, params),
           element: <PlayListPage token={spotifyToken} />,
+        },
+        {
+          path: "addToPlayList",
+          loader: () => getPlayList(spotifyToken),
+          element: <AddToPlayList token={spotifyToken} />,
         },
       ],
     },
