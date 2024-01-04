@@ -5,7 +5,7 @@ import {
   CardContent,
   Typography,
   CardMedia,
-  Tooltip,
+  Button,
 } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
@@ -16,7 +16,6 @@ import SpotifyWebApi from "spotify-web-api-js";
 const spotifyApi = new SpotifyWebApi();
 import PropTypes from "prop-types";
 import spotifyPlayerRequest from "../helpers/spotifyPlayerRequest";
-import AddIcon from "@mui/icons-material/Add";
 import { useNavigate } from "react-router-dom";
 
 function MusicPlayer({ token }) {
@@ -93,14 +92,13 @@ function MusicPlayer({ token }) {
             <SkipNextIcon />
           </IconButton>
         </Box>
-        <Tooltip title="Add to Playlist">
-          <IconButton
-            aria-label="previous"
-            onClick={() => addSongTolayList(nowPlaying)}
-          >
-            <AddIcon />
-          </IconButton>
-        </Tooltip>
+
+        <Button
+          aria-label="previous"
+          onClick={() => addSongTolayList(nowPlaying)}
+        >
+          Add To Playlist
+        </Button>
       </Box>
       <CardMedia
         component="img"

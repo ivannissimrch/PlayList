@@ -6,6 +6,7 @@ import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { CardActionArea } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import HeadPhonesImage from "../assets/images/headphones.jpg";
 
 export default function LibraryPage() {
   const lists = useLoaderData();
@@ -26,6 +27,7 @@ export default function LibraryPage() {
       }}
     >
       {lists.map((list) => {
+        console.log(list);
         return (
           <Card
             sx={{ maxWidth: 345, margin: "10px 10px" }}
@@ -36,8 +38,12 @@ export default function LibraryPage() {
               <CardMedia
                 component="img"
                 height="140"
-                image={list.images[0].url}
-                alt="green iguana"
+                image={
+                  list.images.length === 0
+                    ? HeadPhonesImage
+                    : list.images[0].url
+                }
+                alt="playlist image"
               />
               <CardContent>
                 <Typography gutterBottom variant="h5" component="div">

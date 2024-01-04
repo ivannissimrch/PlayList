@@ -8,6 +8,8 @@ import { CardActionArea } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import addSongToPlayList from "../helpers/addSongTOPlayList";
+import HeadPhonesImage from "../assets/images/headphones.jpg";
+// import createPlayList from "../helpers/createPlayList";
 
 export default function AddToPlayList() {
   const lists = useLoaderData();
@@ -22,6 +24,7 @@ export default function AddToPlayList() {
     console.log(`Song to Add ${songToAdd}`);
 
     addSongToPlayList(id, songToAdd, "POST", token);
+    // createPlayList(token);
     navigate("/");
   }
   return (
@@ -46,7 +49,11 @@ export default function AddToPlayList() {
               <CardMedia
                 component="img"
                 height="140"
-                image={list.images[0].url}
+                image={
+                  list.images.length === 0
+                    ? HeadPhonesImage
+                    : list.images[0].url
+                }
                 alt="green iguana"
               />
               <CardContent>
