@@ -1,4 +1,4 @@
-export default async function createPlayList(token) {
+export default async function createPlayList(token, playListName) {
   try {
     const user_id = "31ffy6shudj4zqvomp5dm4cxqioq";
     const method = "POST";
@@ -10,7 +10,7 @@ export default async function createPlayList(token) {
     };
 
     const requestBody = {
-      name: "Testing creating a playlist",
+      name: playListName,
     };
 
     const requestOptions = {
@@ -26,7 +26,7 @@ export default async function createPlayList(token) {
     }
 
     const resData = await response.json();
-    return resData;
+    return resData.id;
   } catch (error) {
     console.error("Error making Spotify request:", error.message);
     throw error;

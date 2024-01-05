@@ -9,7 +9,11 @@ import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import addSongToPlayList from "../helpers/addSongTOPlayList";
 import HeadPhonesImage from "../assets/images/headphones.jpg";
-// import createPlayList from "../helpers/createPlayList";
+import Paper from "@mui/material/Paper";
+import InputBase from "@mui/material/InputBase";
+import IconButton from "@mui/material/IconButton";
+import createPlayList from "../helpers/createPlayList";
+import { useState } from "react";
 
 export default function AddToPlayList() {
   const lists = useLoaderData();
@@ -17,14 +21,22 @@ export default function AddToPlayList() {
   const location = useLocation();
   const songToAdd = location.state.songToAdd;
   const token = location.state.token;
-  console.log(token);
 
   function handleOnClick(id) {
-    console.log(`playlist id ${id}`);
-    console.log(`Song to Add ${songToAdd}`);
-
     addSongToPlayList(id, songToAdd, "POST", token);
-    // createPlayList(token);
+    navigate("/");
+  }
+
+  const [playListName, setPlayListName] = useState("");
+  function handleOnChange(event) {
+    setPlayListName(event.target.value);
+  }
+
+  async function handleSubmit(event) {
+    event.preventDefault();
+    const playListId = await createPlayList(token, playListName);
+    addSongToPlayList(playListId, songToAdd, "POST", token);
+    setPlayListName("");
     navigate("/");
   }
   return (
@@ -37,8 +49,32 @@ export default function AddToPlayList() {
         flexWrap: "wrap",
       }}
     >
+      <Paper
+        component="form"
+        sx={{
+          p: "2px 4px",
+          margin: "8px 8px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          width: "100%",
+        }}
+        onSubmit={handleSubmit}
+      >
+        <InputBase
+          sx={{ ml: 1, flex: 1 }}
+          placeholder="Create new playlist and add song"
+          inputProps={{ "aria-label": "Create new playlist" }}
+          onChange={handleOnChange}
+          value={playListName}
+        />
+        <IconButton
+          type="button"
+          sx={{ p: "10px" }}
+          aria-label="search"
+        ></IconButton>
+      </Paper>
       {lists.map((list) => {
-        console.log(list);
         return (
           <Card
             sx={{ maxWidth: 345, margin: "10px 10px" }}

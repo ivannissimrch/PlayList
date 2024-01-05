@@ -27,7 +27,6 @@ export default function LibraryPage() {
       }}
     >
       {lists.map((list) => {
-        console.log(list);
         return (
           <Card
             sx={{ maxWidth: 345, margin: "10px 10px" }}

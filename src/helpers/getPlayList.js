@@ -11,7 +11,6 @@ export default async function getPlayList(token) {
       throw new Error("Failed to fetch data");
     }
     const resData = await response.json();
-    console.log(resData.items);
     return resData.items;
   } catch (error) {
     console.error("Error making spotify requesr");
