@@ -45,7 +45,6 @@ export default function PlayListPage({ token }) {
                 />
               </ListItemAvatar>
               <ListItemText
-                // id={labelId}
                 primary={`${value.track.name} ${value.track.album.artists[0].name} `}
               />
             </ListItemButton>

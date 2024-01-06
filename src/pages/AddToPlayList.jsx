@@ -22,9 +22,9 @@ export default function AddToPlayList() {
   const songToAdd = location.state.songToAdd;
   const token = location.state.token;
 
-  function handleOnClick(id) {
-    addSongToPlayList(id, songToAdd, "POST", token);
-    navigate("/");
+  async function handleOnClick(id) {
+    await addSongToPlayList(id, songToAdd, "POST", token);
+    navigate(`/library/${id}`);
   }
 
   const [playListName, setPlayListName] = useState("");
@@ -35,9 +35,9 @@ export default function AddToPlayList() {
   async function handleSubmit(event) {
     event.preventDefault();
     const playListId = await createPlayList(token, playListName);
-    addSongToPlayList(playListId, songToAdd, "POST", token);
+    await addSongToPlayList(playListId, songToAdd, "POST", token);
     setPlayListName("");
-    navigate("/");
+    navigate(`/library/${playListId}`);
   }
   return (
     <Container
