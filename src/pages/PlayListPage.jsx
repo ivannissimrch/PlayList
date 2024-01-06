@@ -10,11 +10,14 @@ import { useNavigate, useParams } from "react-router-dom";
 import playSelectedSong from "../helpers/playSelectedSong";
 import { Button } from "@mui/material";
 import deleteSongFromPayList from "../helpers/deleteSongFromPlayList";
+import { useState } from "react";
 
 export default function PlayListPage({ token }) {
   const songs = useLoaderData();
   const navigate = useNavigate();
   const { playlistId } = useParams();
+
+  const [songsOnPlayList, setSongsOnPlayList] = useState(songs);
 
   function handleOnClick(value) {
     playSelectedSong("play", "PUT", token, value.track.uri);
@@ -22,13 +25,16 @@ export default function PlayListPage({ token }) {
   }
 
   function handleDelete(value) {
+    const updatedSongs = songsOnPlayList.filter(
+      (song) => song.track.uri !== value.track.uri
+    );
+    setSongsOnPlayList(updatedSongs);
     deleteSongFromPayList(playlistId, value.track.uri, "DELETE", token);
-    navigate("/");
   }
 
   return (
     <List dense sx={{ width: "100%", bgcolor: "background.paper" }}>
-      {songs.map((value) => {
+      {songsOnPlayList.map((value) => {
         return (
           <ListItem key={value.track.id}>
             <ListItemButton onClick={() => handleOnClick(value)}>
