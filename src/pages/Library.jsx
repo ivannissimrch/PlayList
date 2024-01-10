@@ -20,7 +20,7 @@ export default function LibraryPage() {
     <Container
       sx={{
         display: "flex",
-        alignItems: "center",
+        alignItems: "stretch",
         justifyContent: "center",
         direction: "row",
         flexWrap: "wrap",
@@ -29,14 +29,15 @@ export default function LibraryPage() {
       {lists.map((list) => {
         return (
           <Card
-            sx={{ maxWidth: 345, margin: "10px 10px" }}
+            sx={{ width: 250, margin: "10px 10px" }}
             key={list.id}
             onClick={() => handleOnClick(list.id)}
           >
             <CardActionArea>
               <CardMedia
                 component="img"
-                height="140"
+                height="250"
+                width="250"
                 image={
                   list.images.length === 0
                     ? HeadPhonesImage

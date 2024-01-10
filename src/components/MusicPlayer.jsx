@@ -35,7 +35,7 @@ function MusicPlayer({ token }) {
     });
   };
 
-  function addSongTolayList(songToAdd) {
+  function addSongToPlayList(songToAdd) {
     navigate("addToPlayList", {
       state: { songToAdd: songToAdd.songUrl, token: token },
     });
@@ -95,7 +95,7 @@ function MusicPlayer({ token }) {
 
         <Button
           aria-label="previous"
-          onClick={() => addSongTolayList(nowPlaying)}
+          onClick={() => addSongToPlayList(nowPlaying)}
         >
           Add To Playlist
         </Button>
