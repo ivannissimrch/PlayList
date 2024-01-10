@@ -22,9 +22,9 @@ export default function AddToPlayList() {
   const songToAdd = location.state.songToAdd;
   const token = location.state.token;
 
-  async function handleOnClick(id) {
-    await addSongToPlayList(id, songToAdd, "POST", token);
-    navigate(`/library/${id}`);
+  async function handleOnClick(ListId) {
+    await addSongToPlayList(ListId, songToAdd, "POST", token);
+    navigate(`/library/${ListId}`);
   }
 
   const [playListName, setPlayListName] = useState("");

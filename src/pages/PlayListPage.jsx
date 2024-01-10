@@ -40,6 +40,7 @@ export default function PlayListPage({ token }) {
             <ListItemButton onClick={() => handleOnClick(value)}>
               <ListItemAvatar>
                 <Avatar
+                  variant="square"
                   alt="Album image"
                   src={value.track.album.images[0].url}
                 />

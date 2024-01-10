@@ -24,7 +24,11 @@ export default function SearchList({ searchResults, token }) {
           <ListItem key={value.id} onClick={() => handleOnClick(value)}>
             <ListItemButton>
               <ListItemAvatar>
-                <Avatar alt="Album image" src={value.album.images[0].url} />
+                <Avatar
+                  variant="square"
+                  alt="Album image"
+                  src={value.album.images[0].url}
+                />
               </ListItemAvatar>
               <ListItemText
                 id={labelId}
