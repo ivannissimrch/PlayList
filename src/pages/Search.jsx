@@ -35,8 +35,6 @@ export default function SearchPage({ token }) {
         display: "flex",
         alignItems: "flex-start",
         justifyContent: "center",
-        width: "100%",
-        height: "100vh",
       }}
     >
       <Container>
