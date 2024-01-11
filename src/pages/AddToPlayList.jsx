@@ -14,17 +14,28 @@ import InputBase from "@mui/material/InputBase";
 import IconButton from "@mui/material/IconButton";
 import createPlayList from "../helpers/createPlayList";
 import { useState } from "react";
+import getPlayListSongs from "../helpers/getPlayListSongs";
 
 export default function AddToPlayList() {
-  const lists = useLoaderData();
+  const playLists = useLoaderData();
   const navigate = useNavigate();
   const location = useLocation();
   const songToAdd = location.state.songToAdd;
   const token = location.state.token;
 
-  async function handleOnClick(ListId) {
-    await addSongToPlayList(ListId, songToAdd, "POST", token);
-    navigate(`/library/${ListId}`);
+  async function handleOnClick(selectedPlayList) {
+    //get songs of selected playlist, check  if  song is on list if song is on list don't add
+    const songsOnPlayList = await getPlayListSongs(token, {
+      playlistId: selectedPlayList.id,
+    });
+
+    if (songsOnPlayList.some((song) => song.track.uri === songToAdd)) {
+      alert("song is already on this list");
+      return;
+    }
+
+    await addSongToPlayList(selectedPlayList.id, songToAdd, "POST", token);
+    navigate(`/library/${selectedPlayList.id}`);
   }
 
   const [playListName, setPlayListName] = useState("");
@@ -34,6 +45,15 @@ export default function AddToPlayList() {
 
   async function handleSubmit(event) {
     event.preventDefault();
+    if (
+      playLists.some(
+        (list) => list.name.toUpperCase() === playListName.toUpperCase()
+      )
+    ) {
+      alert("cannot use this name");
+      return;
+    }
+
     const playListId = await createPlayList(token, playListName);
     await addSongToPlayList(playListId, songToAdd, "POST", token);
     setPlayListName("");
@@ -74,12 +94,12 @@ export default function AddToPlayList() {
           aria-label="search"
         ></IconButton>
       </Paper>
-      {lists.map((list) => {
+      {playLists.map((list) => {
         return (
           <Card
             sx={{ width: 250, margin: "10px 10px" }}
             key={list.id}
-            onClick={() => handleOnClick(list.id)}
+            onClick={() => handleOnClick(list)}
           >
             <CardActionArea>
               <CardMedia

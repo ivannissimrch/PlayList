@@ -37,7 +37,14 @@ export default function SearchPage({ token }) {
         justifyContent: "center",
       }}
     >
-      <Container>
+      <Container
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
         <Paper
           component="form"
           sx={{

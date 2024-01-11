@@ -1,7 +1,7 @@
-export default async function getPlayListSongs(token, playlist_id) {
+export default async function getPlayListSongs(token, { playlistId }) {
   try {
     const response = await fetch(
-      `https://api.spotify.com/v1/playlists/${playlist_id.playlistId}`,
+      `https://api.spotify.com/v1/playlists/${playlistId}`,
       {
         method: "GET",
         headers: {
