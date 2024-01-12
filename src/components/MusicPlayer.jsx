@@ -25,6 +25,7 @@ function MusicPlayer({ token }) {
 
   const getNowPlaying = () => {
     spotifyApi.getMyCurrentPlaybackState().then((response) => {
+      console.log(response);
       setIsPlaying(response.is_playing);
       setNowPlaying({
         name: response.item.name,

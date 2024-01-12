@@ -15,6 +15,7 @@ import IconButton from "@mui/material/IconButton";
 import createPlayList from "../helpers/createPlayList";
 import { useState } from "react";
 import getPlayListSongs from "../helpers/getPlayListSongs";
+import toast from "react-hot-toast";
 
 export default function AddToPlayList() {
   const playLists = useLoaderData();
@@ -30,7 +31,7 @@ export default function AddToPlayList() {
     });
 
     if (songsOnPlayList.some((song) => song.track.uri === songToAdd)) {
-      alert("song is already on this list");
+      toast("Song is already on this list");
       return;
     }
 
@@ -50,7 +51,7 @@ export default function AddToPlayList() {
         (list) => list.name.toUpperCase() === playListName.toUpperCase()
       )
     ) {
-      alert("cannot use this name");
+      toast("Cannot use this name");
       return;
     }
 
