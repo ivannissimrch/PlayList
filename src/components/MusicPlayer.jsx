@@ -14,14 +14,15 @@ import PauseIcon from "@mui/icons-material/Pause";
 import SkipNextIcon from "@mui/icons-material/SkipNext";
 import SpotifyWebApi from "spotify-web-api-js";
 const spotifyApi = new SpotifyWebApi();
-import PropTypes from "prop-types";
 import spotifyPlayerRequest from "../helpers/spotifyPlayerRequest";
 import { useNavigate } from "react-router-dom";
+import { useRouteLoaderData } from "react-router-dom";
 
-function MusicPlayer({ token }) {
+export default function MusicPlayer() {
   const [nowPlaying, setNowPlaying] = useState({});
   const [isPlaying, setIsPlaying] = useState(false);
   const navigate = useNavigate();
+  const token = useRouteLoaderData("root");
 
   const getNowPlaying = () => {
     spotifyApi.getMyCurrentPlaybackState().then((response) => {
@@ -38,7 +39,7 @@ function MusicPlayer({ token }) {
 
   function addSongToPlayList(songToAdd) {
     navigate("addToPlayList", {
-      state: { songToAdd: songToAdd.songUrl, token: token },
+      state: { songToAdd: songToAdd.songUrl },
     });
   }
 
@@ -110,10 +111,3 @@ function MusicPlayer({ token }) {
     </Card>
   );
 }
-
-//propTypes
-MusicPlayer.propTypes = {
-  token: PropTypes.string.isRequired,
-};
-
-export default MusicPlayer;

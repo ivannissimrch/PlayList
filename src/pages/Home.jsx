@@ -1,8 +1,9 @@
 import { Box } from "@mui/material";
 import MusicPlayer from "../components/MusicPlayer";
-import PropTypes from "prop-types";
+import { useRouteLoaderData } from "react-router-dom";
 
-export default function HomePage({ token }) {
+export default function HomePage() {
+  const token = useRouteLoaderData("root");
   return (
     <Box
       display="flex"
@@ -10,11 +11,7 @@ export default function HomePage({ token }) {
       justifyContent="center"
       minHeight={500}
     >
-      {token && <MusicPlayer token={token} />}
+      {token && <MusicPlayer />}
     </Box>
   );
 }
-//propTypes
-HomePage.propTypes = {
-  token: PropTypes.string.isRequired,
-};

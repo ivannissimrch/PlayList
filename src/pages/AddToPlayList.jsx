@@ -16,17 +16,18 @@ import createPlayList from "../helpers/createPlayList";
 import { useState } from "react";
 import getPlayListSongs from "../helpers/getPlayListSongs";
 import toast from "react-hot-toast";
+import { useRouteLoaderData } from "react-router-dom";
 
 export default function AddToPlayList() {
   const playLists = useLoaderData();
   const navigate = useNavigate();
   const location = useLocation();
   const songToAdd = location.state.songToAdd;
-  const token = location.state.token;
+  const token = useRouteLoaderData("root");
 
   async function handleOnClick(selectedPlayList) {
     //get songs of selected playlist, check  if  song is on list if song is on list don't add
-    const songsOnPlayList = await getPlayListSongs(token, {
+    const songsOnPlayList = await getPlayListSongs({
       playlistId: selectedPlayList.id,
     });
 

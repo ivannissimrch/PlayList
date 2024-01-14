@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import { useLoaderData } from "react-router-dom";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
@@ -11,8 +10,10 @@ import playSelectedSong from "../helpers/playSelectedSong";
 import { Button } from "@mui/material";
 import deleteSongFromPayList from "../helpers/deleteSongFromPlayList";
 import { useState } from "react";
+import { useRouteLoaderData } from "react-router-dom";
 
-export default function PlayListPage({ token }) {
+export default function PlayListPage() {
+  const token = useRouteLoaderData("root");
   const songs = useLoaderData();
   const navigate = useNavigate();
   const { playlistId } = useParams();
@@ -56,7 +57,3 @@ export default function PlayListPage({ token }) {
     </List>
   );
 }
-//propTypes
-PlayListPage.propTypes = {
-  token: PropTypes.string.isRequired,
-};
