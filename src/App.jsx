@@ -13,10 +13,10 @@ const spotifyApi = new SpotifyWebApi();
 import Login from "./components/Login";
 import getPlayListSongs from "./helpers/getPlayListSongs";
 import AddToPlayList from "./pages/AddToPlayList";
+import getSpotifyToken from "./helpers/getSpotifyToken";
 
 export default function App() {
-  const [spotifyToken, setSpotifyToken] = useState("");
-
+  const [spotifyToken, setSpotifyToken] = useState(getSpotifyToken());
   //get token
   useEffect(() => {
     const spotifyToken = getTokenFromUrl().access_token;
@@ -24,7 +24,8 @@ export default function App() {
     if (spotifyToken) {
       setSpotifyToken(spotifyToken);
       spotifyApi.setAccessToken(spotifyToken);
-      spotifyApi.getMe();
+      //store spotify token on local storage
+      localStorage.setItem("token", spotifyToken);
     }
   }, []);
 
@@ -33,30 +34,28 @@ export default function App() {
       path: "/",
       element: <RootLayout />,
       errorElement: <ErrorPage />,
+      loader: getSpotifyToken,
+      id: "root",
       children: [
         {
           path: "",
-          element: !spotifyToken ? (
-            <Login />
-          ) : (
-            <HomePage token={spotifyToken} />
-          ),
+          element: !spotifyToken ? <Login /> : <HomePage />,
         },
-        { path: "search", element: <SearchPage token={spotifyToken} /> },
+        { path: "search", element: <SearchPage /> },
         {
           path: "library",
-          loader: () => getPlayList(spotifyToken),
-          element: <LibraryPage token={spotifyToken} />,
+          loader: () => getPlayList(),
+          element: <LibraryPage />,
         },
         {
           path: "/library/:playlistId",
-          loader: ({ params }) => getPlayListSongs(spotifyToken, params),
-          element: <PlayListPage token={spotifyToken} />,
+          loader: ({ params }) => getPlayListSongs(params),
+          element: <PlayListPage />,
         },
         {
           path: "addToPlayList",
-          loader: () => getPlayList(spotifyToken),
-          element: <AddToPlayList token={spotifyToken} />,
+          loader: () => getPlayList(),
+          element: <AddToPlayList />,
         },
       ],
     },

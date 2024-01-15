@@ -3,14 +3,14 @@ import InputBase from "@mui/material/InputBase";
 import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
 import { Box, Container } from "@mui/material";
-import PropTypes from "prop-types";
 import { useState } from "react";
 import makeSpotifySearch from "../helpers/makeSpotifySearch";
 import SearchList from "../components/SearchList";
-
-export default function SearchPage({ token }) {
+import { useRouteLoaderData } from "react-router-dom";
+export default function SearchPage() {
   const [searchResults, setSearchResults] = useState("");
   const [songToSearch, setSongToSearch] = useState("");
+  const token = useRouteLoaderData("root");
 
   function handleOnChange(event) {
     setSongToSearch(event.target.value);
@@ -84,8 +84,3 @@ export default function SearchPage({ token }) {
     </Box>
   );
 }
-
-//propTypes
-SearchPage.propTypes = {
-  token: PropTypes.string.isRequired,
-};

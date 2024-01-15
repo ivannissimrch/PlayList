@@ -1,4 +1,7 @@
-export default async function getPlayListSongs(token, { playlistId }) {
+import getSpotifyToken from "./getSpotifyToken";
+
+export default async function getPlayListSongs({ playlistId }) {
+  const token = getSpotifyToken();
   try {
     const response = await fetch(
       `https://api.spotify.com/v1/playlists/${playlistId}`,
