@@ -1,5 +1,8 @@
-export default async function playSelectedSong(endPoint, method, token, uri) {
+import getSpotifyToken from "./getSpotifyToken";
+
+export default async function playSelectedSong(endPoint, method, uri) {
   try {
+    const token = getSpotifyToken();
     const url = `https://api.spotify.com/v1/me/player/${endPoint}`;
 
     const headers = {

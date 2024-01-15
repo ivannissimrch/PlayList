@@ -10,10 +10,8 @@ import playSelectedSong from "../helpers/playSelectedSong";
 import { Button } from "@mui/material";
 import deleteSongFromPayList from "../helpers/deleteSongFromPlayList";
 import { useState } from "react";
-import { useRouteLoaderData } from "react-router-dom";
 
 export default function PlayListPage() {
-  const token = useRouteLoaderData("root");
   const songs = useLoaderData();
   const navigate = useNavigate();
   const { playlistId } = useParams();
@@ -21,7 +19,7 @@ export default function PlayListPage() {
   const [songsOnPlayList, setSongsOnPlayList] = useState(songs);
 
   function handleOnClick(value) {
-    playSelectedSong("play", "PUT", token, value.track.uri);
+    playSelectedSong("play", "PUT", value.track.uri);
     navigate("/");
   }
 
@@ -30,7 +28,7 @@ export default function PlayListPage() {
       (song) => song.track.uri !== value.track.uri
     );
     setSongsOnPlayList(updatedSongs);
-    deleteSongFromPayList(playlistId, value.track.uri, "DELETE", token);
+    deleteSongFromPayList(playlistId, value.track.uri, "DELETE");
   }
 
   return (

@@ -6,11 +6,9 @@ import { Box, Container } from "@mui/material";
 import { useState } from "react";
 import makeSpotifySearch from "../helpers/makeSpotifySearch";
 import SearchList from "../components/SearchList";
-import { useRouteLoaderData } from "react-router-dom";
 export default function SearchPage() {
   const [searchResults, setSearchResults] = useState("");
   const [songToSearch, setSongToSearch] = useState("");
-  const token = useRouteLoaderData("root");
 
   function handleOnChange(event) {
     setSongToSearch(event.target.value);
@@ -20,8 +18,7 @@ export default function SearchPage() {
     event.preventDefault();
     const results = await makeSpotifySearch(
       `q=remaster%2520track%3ADoxy%2520artist%3A${songToSearch}&type=track`,
-      "GET",
-      token
+      "GET"
     );
     setSearchResults(results);
     setSongToSearch("");
@@ -76,9 +73,7 @@ export default function SearchPage() {
             alignItems: "flex-start",
           }}
         >
-          {searchResults && (
-            <SearchList searchResults={searchResults} token={token} />
-          )}
+          {searchResults && <SearchList searchResults={searchResults} />}
         </Box>
       </Container>
     </Box>

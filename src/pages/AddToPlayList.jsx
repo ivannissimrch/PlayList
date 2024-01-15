@@ -16,14 +16,12 @@ import createPlayList from "../helpers/createPlayList";
 import { useState } from "react";
 import getPlayListSongs from "../helpers/getPlayListSongs";
 import toast from "react-hot-toast";
-import { useRouteLoaderData } from "react-router-dom";
 
 export default function AddToPlayList() {
   const playLists = useLoaderData();
   const navigate = useNavigate();
   const location = useLocation();
   const songToAdd = location.state.songToAdd;
-  const token = useRouteLoaderData("root");
 
   async function handleOnClick(selectedPlayList) {
     //get songs of selected playlist, check  if  song is on list if song is on list don't add
@@ -36,7 +34,7 @@ export default function AddToPlayList() {
       return;
     }
 
-    await addSongToPlayList(selectedPlayList.id, songToAdd, "POST", token);
+    await addSongToPlayList(selectedPlayList.id, songToAdd, "POST");
     navigate(`/library/${selectedPlayList.id}`);
   }
 
@@ -56,8 +54,8 @@ export default function AddToPlayList() {
       return;
     }
 
-    const playListId = await createPlayList(token, playListName);
-    await addSongToPlayList(playListId, songToAdd, "POST", token);
+    const playListId = await createPlayList(playListName);
+    await addSongToPlayList(playListId, songToAdd, "POST");
     setPlayListName("");
     navigate(`/library/${playListId}`);
   }

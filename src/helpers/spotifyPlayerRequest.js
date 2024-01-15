@@ -1,5 +1,8 @@
-export default async function spotifyPlayerRequest(endPoint, method, token) {
+import getSpotifyToken from "./getSpotifyToken";
+
+export default async function spotifyPlayerRequest(endPoint, method) {
   try {
+    const token = getSpotifyToken();
     const response = await fetch(
       `https://api.spotify.com/v1/me/player/${endPoint}`,
       {

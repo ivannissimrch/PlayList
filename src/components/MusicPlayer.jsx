@@ -16,17 +16,14 @@ import SpotifyWebApi from "spotify-web-api-js";
 const spotifyApi = new SpotifyWebApi();
 import spotifyPlayerRequest from "../helpers/spotifyPlayerRequest";
 import { useNavigate } from "react-router-dom";
-import { useRouteLoaderData } from "react-router-dom";
 
 export default function MusicPlayer() {
   const [nowPlaying, setNowPlaying] = useState({});
   const [isPlaying, setIsPlaying] = useState(false);
   const navigate = useNavigate();
-  const token = useRouteLoaderData("root");
 
   const getNowPlaying = () => {
     spotifyApi.getMyCurrentPlaybackState().then((response) => {
-      console.log(response);
       setIsPlaying(response.is_playing);
       setNowPlaying({
         name: response.item.name,
@@ -44,19 +41,19 @@ export default function MusicPlayer() {
   }
 
   async function startPlayBack() {
-    await spotifyPlayerRequest("play", "PUT", token);
+    await spotifyPlayerRequest("play", "PUT");
   }
 
   async function pause() {
-    await spotifyPlayerRequest("pause", "PUT", token);
+    await spotifyPlayerRequest("pause", "PUT");
   }
 
   async function nextSong() {
-    await spotifyPlayerRequest("next", "POST", token);
+    await spotifyPlayerRequest("next", "POST");
   }
 
   async function previousSong() {
-    await spotifyPlayerRequest("previous", "POST", token);
+    await spotifyPlayerRequest("previous", "POST");
   }
 
   useEffect(getNowPlaying, [nowPlaying]);

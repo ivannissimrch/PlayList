@@ -1,5 +1,8 @@
-export default async function createPlayList(token, playListName) {
+import getSpotifyToken from "./getSpotifyToken";
+
+export default async function createPlayList(playListName) {
   try {
+    const token = getSpotifyToken();
     const user_id = "31ffy6shudj4zqvomp5dm4cxqioq";
     const method = "POST";
     const url = `https://api.spotify.com/v1/users/${user_id}/playlists`;

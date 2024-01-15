@@ -1,10 +1,8 @@
-export default async function addSongToPlayList(
-  playlist_id,
-  uri,
-  method,
-  token
-) {
+import getSpotifyToken from "./getSpotifyToken";
+
+export default async function addSongToPlayList(playlist_id, uri, method) {
   try {
+    const token = getSpotifyToken();
     const url = `https://api.spotify.com/v1/playlists/${playlist_id}/tracks`;
 
     const headers = {

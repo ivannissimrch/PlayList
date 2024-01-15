@@ -8,11 +8,11 @@ import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import playSelectedSong from "../helpers/playSelectedSong";
 
-export default function SearchList({ searchResults, token }) {
+export default function SearchList({ searchResults }) {
   const navigate = useNavigate();
 
   function handleOnClick(value) {
-    playSelectedSong("play", "PUT", token, value.uri);
+    playSelectedSong("play", "PUT", value.uri);
     navigate("/");
   }
 
@@ -44,5 +44,4 @@ export default function SearchList({ searchResults, token }) {
 
 SearchList.propTypes = {
   searchResults: PropTypes.object.isRequired,
-  token: PropTypes.string.isRequired,
 };

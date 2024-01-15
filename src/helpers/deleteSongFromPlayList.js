@@ -1,9 +1,7 @@
-export default async function deleteSongFromPayList(
-  playlist_id,
-  uri,
-  method,
-  token
-) {
+import getSpotifyToken from "./getSpotifyToken";
+
+export default async function deleteSongFromPayList(playlist_id, uri, method) {
+  const token = getSpotifyToken();
   try {
     const url = `https://api.spotify.com/v1/playlists/${playlist_id}/tracks`;
 
