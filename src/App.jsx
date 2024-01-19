@@ -7,9 +7,7 @@ import ErrorPage from "./pages/Error";
 import getPlayList from "./helpers/getPlayList";
 import PlayListPage from "./pages/PlayListPage";
 import { useEffect, useState } from "react";
-import getTokenFromUrl from "./helpers/getToken";
-import SpotifyWebApi from "spotify-web-api-js";
-const spotifyApi = new SpotifyWebApi();
+import getTokenFromUrl from "./helpers/getTokenFromUrl";
 import Login from "./components/Login";
 import getPlayListSongs from "./helpers/getPlayListSongs";
 import AddToPlayList from "./pages/AddToPlayList";
@@ -23,7 +21,6 @@ export default function App() {
     window.location.hash = ";";
     if (spotifyToken) {
       setSpotifyToken(spotifyToken);
-      spotifyApi.setAccessToken(spotifyToken);
       //store spotify token on local storage
       localStorage.setItem("token", spotifyToken);
     }

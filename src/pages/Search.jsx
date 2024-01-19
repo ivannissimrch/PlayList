@@ -73,7 +73,7 @@ export default function SearchPage() {
             alignItems: "flex-start",
           }}
         >
-          {searchResults && <SearchList searchResults={searchResults} />}
+          {searchResults && <SearchList searchResultsSongs={searchResults} />}
         </Box>
       </Container>
     </Box>

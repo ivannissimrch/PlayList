@@ -1,7 +1,8 @@
-import { AppBar, Toolbar, Grid, Tabs, Tab, Button } from "@mui/material";
+import { AppBar, Toolbar, Grid, Tabs, Tab } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
 import SearchIcon from "@mui/icons-material/Search";
 import LibraryMusicIcon from "@mui/icons-material/LibraryMusic";
+import LogoutIcon from "@mui/icons-material/Logout";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -10,9 +11,9 @@ export default function Navbar() {
   const navigate = useNavigate();
 
   function handleOnClick() {
-    localStorage.removeItem("token");
     navigate("/");
-    location.reload();
+    localStorage.removeItem("token");
+    window.location.reload();
   }
 
   return (
@@ -50,10 +51,13 @@ export default function Navbar() {
                   </Link>
                 }
               />
-
-              <Button color="inherit" onClick={handleOnClick}>
-                LogOut
-              </Button>
+              <Tab
+                label={
+                  <Link to="/" onClick={handleOnClick}>
+                    <LogoutIcon fontSize="large" sx={{ color: "white" }} />
+                  </Link>
+                }
+              />
             </Tabs>
           </Grid>
         </Grid>

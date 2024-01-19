@@ -19,6 +19,7 @@
     "react-dom": "^18.2.0",
     "react-hot-toast": "^2.4.1",
     "react-router-dom": "^6.20.1",
+    "react-spotify-web-playback": "^0.14.2",
     "spotify-web-api-js": "^1.5.2",
     "spotify-web-playback": "^1.4.0"
   },

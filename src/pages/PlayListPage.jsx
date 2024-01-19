@@ -6,49 +6,51 @@ import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
 import { useNavigate, useParams } from "react-router-dom";
-import playSelectedSong from "../helpers/playSelectedSong";
 import { Button } from "@mui/material";
 import deleteSongFromPayList from "../helpers/deleteSongFromPlayList";
 import { useState } from "react";
+import { useContext } from "react";
+import { AppContext } from "../components/AppContext";
 
 export default function PlayListPage() {
   const songs = useLoaderData();
   const navigate = useNavigate();
   const { playlistId } = useParams();
+  const { playSelectedSong } = useContext(AppContext);
 
   const [songsOnPlayList, setSongsOnPlayList] = useState(songs);
 
-  function handleOnClick(value) {
-    playSelectedSong("play", "PUT", value.track.uri);
+  function handleOnClick(selectedSong) {
+    playSelectedSong(selectedSong.track.uri);
     navigate("/");
   }
 
-  function handleDelete(value) {
+  function handleDelete(selectedSong) {
     const updatedSongs = songsOnPlayList.filter(
-      (song) => song.track.uri !== value.track.uri
+      (song) => song.track.uri !== selectedSong.track.uri
     );
     setSongsOnPlayList(updatedSongs);
-    deleteSongFromPayList(playlistId, value.track.uri, "DELETE");
+    deleteSongFromPayList(playlistId, selectedSong.track.uri, "DELETE");
   }
 
   return (
     <List dense sx={{ width: "100%", bgcolor: "background.paper" }}>
-      {songsOnPlayList.map((value) => {
+      {songsOnPlayList.map((song) => {
         return (
-          <ListItem key={value.track.id}>
-            <ListItemButton onClick={() => handleOnClick(value)}>
+          <ListItem key={song.track.id}>
+            <ListItemButton onClick={() => handleOnClick(song)}>
               <ListItemAvatar>
                 <Avatar
                   variant="square"
                   alt="Album image"
-                  src={value.track.album.images[0].url}
+                  src={song.track.album.images[0].url}
                 />
               </ListItemAvatar>
               <ListItemText
-                primary={`${value.track.name} ${value.track.album.artists[0].name} `}
+                primary={`${song.track.name} ${song.track.album.artists[0].name} `}
               />
             </ListItemButton>
-            <Button onClick={() => handleDelete(value)}>Delete</Button>
+            <Button onClick={() => handleDelete(song)}>Delete</Button>
           </ListItem>
         );
       })}
