@@ -6,33 +6,35 @@ import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
-import playSelectedSong from "../helpers/playSelectedSong";
+import { useContext } from "react";
+import { AppContext } from "./AppContext";
 
-export default function SearchList({ searchResults }) {
+export default function SearchList({ searchResultsSongs }) {
   const navigate = useNavigate();
+  const { playSelectedSong } = useContext(AppContext);
 
-  function handleOnClick(value) {
-    playSelectedSong("play", "PUT", value.uri);
+  function handleOnClick(song) {
+    playSelectedSong([song.uri]);
     navigate("/");
   }
 
   return (
     <List dense sx={{ width: "100%", bgcolor: "background.paper" }}>
-      {searchResults.tracks.items.map((value) => {
-        const labelId = `checkbox-list-secondary-label-${value}`;
+      {searchResultsSongs.tracks.items.map((song) => {
+        const labelId = `checkbox-list-secondary-label-${song}`;
         return (
-          <ListItem key={value.id} onClick={() => handleOnClick(value)}>
+          <ListItem key={song.id} onClick={() => handleOnClick(song)}>
             <ListItemButton>
               <ListItemAvatar>
                 <Avatar
                   variant="square"
                   alt="Album image"
-                  src={value.album.images[0].url}
+                  src={song.album.images[0].url}
                 />
               </ListItemAvatar>
               <ListItemText
                 id={labelId}
-                primary={`${value.name} ${value.album.artists[0].name} `}
+                primary={`${song.name} ${song.album.artists[0].name} `}
               />
             </ListItemButton>
           </ListItem>
@@ -43,5 +45,5 @@ export default function SearchList({ searchResults }) {
 }
 
 SearchList.propTypes = {
-  searchResults: PropTypes.object.isRequired,
+  searchResultsSongs: PropTypes.object.isRequired,
 };
