@@ -21,7 +21,7 @@ export default function PlayListPage() {
   const [songsOnPlayList, setSongsOnPlayList] = useState(songs);
 
   function handleOnClick(selectedSong) {
-    playSelectedSong([selectedSong.track.uri]);
+    playSelectedSong(selectedSong.track.uri);
     navigate("/");
   }
 

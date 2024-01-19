@@ -6,22 +6,26 @@ import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { CardActionArea } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { useLocation } from "react-router-dom";
+// import { useLocation } from "react-router-dom";
 import addSongToPlayList from "../helpers/addSongTOPlayList";
 import HeadPhonesImage from "../assets/images/headphones.jpg";
 import Paper from "@mui/material/Paper";
 import InputBase from "@mui/material/InputBase";
 import IconButton from "@mui/material/IconButton";
 import createPlayList from "../helpers/createPlayList";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import getPlayListSongs from "../helpers/getPlayListSongs";
 import toast from "react-hot-toast";
+import { AppContext } from "../components/AppContext";
 
 export default function AddToPlayList() {
   const playLists = useLoaderData();
   const navigate = useNavigate();
-  const location = useLocation();
-  const songToAdd = location.state.songToAdd;
+  const { songToPlay } = useContext(AppContext);
+  const songToAdd = songToPlay;
+
+  // const location = useLocation();
+  // const songToAdd = location.state.songToAdd;
 
   async function handleOnClick(selectedPlayList) {
     //get songs of selected playlist, check  if  song is on list if song is on list don't add

@@ -4,14 +4,16 @@ import SearchIcon from "@mui/icons-material/Search";
 import LibraryMusicIcon from "@mui/icons-material/LibraryMusic";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Navbar() {
   const [value, setValue] = useState(0);
+  const navigate = useNavigate();
 
   function handleOnClick() {
+    navigate("/");
     localStorage.removeItem("token");
-    location.reload();
+    window.location.reload();
   }
 
   return (

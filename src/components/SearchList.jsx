@@ -14,7 +14,7 @@ export default function SearchList({ searchResultsSongs }) {
   const { playSelectedSong } = useContext(AppContext);
 
   function handleOnClick(song) {
-    playSelectedSong([song.uri]);
+    playSelectedSong(song.uri);
     navigate("/");
   }
 
