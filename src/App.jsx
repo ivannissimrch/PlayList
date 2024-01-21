@@ -14,7 +14,7 @@ import AddToPlayList from "./pages/AddToPlayList";
 import getSpotifyToken from "./helpers/getSpotifyToken";
 
 export default function App() {
-  const [spotifyToken, setSpotifyToken] = useState(getSpotifyToken());
+  const [spotifyToken, setSpotifyToken] = useState();
   //get token
   useEffect(() => {
     const spotifyToken = getTokenFromUrl().access_token;

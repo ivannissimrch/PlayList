@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 export default function MusicPlayer() {
   //maybe get this token from context provider?
   const token = getSpotifyToken();
-  const { songToPlay } = useContext(AppContext);
+  const { songOnPlayer } = useContext(AppContext);
   const navigate = useNavigate();
   function handleOnClick() {
     navigate("addToPlayList");
@@ -16,7 +16,13 @@ export default function MusicPlayer() {
 
   return (
     <Card sx={{ display: "flex", flexDirection: "column" }}>
-      <SpotifyPlayer token={token} uris={[songToPlay]} play="true" />
+      <SpotifyPlayer
+        token={token}
+        uris={[songOnPlayer]}
+        play="true"
+        layout="responsive"
+        hideAttribution="true"
+      />
       <Button onClick={handleOnClick}>Add to Playlist</Button>
     </Card>
   );

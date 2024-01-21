@@ -4,19 +4,19 @@ import PropTypes from "prop-types";
 export const AppContext = createContext({});
 
 export function AppContextProvider({ children }) {
-  const [songToPlay, setSongToPlay] = useState(
+  const [songOnPlayer, setSongOnPlayer] = useState(
     "spotify:track:0puoT9566xTWBoRw8qDKxk"
   );
 
   function playSelectedSong(selectedSong) {
-    setSongToPlay(selectedSong);
+    setSongOnPlayer(selectedSong);
   }
 
   return (
     <AppContext.Provider
       value={{
         playSelectedSong,
-        songToPlay,
+        songOnPlayer,
       }}
     >
       {children}
