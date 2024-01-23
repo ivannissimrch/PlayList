@@ -1,4 +1,4 @@
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useRouteLoaderData } from "react-router-dom";
 import { Container } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -6,18 +6,16 @@ import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { CardActionArea } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import addSongToPlayList from "../helpers/addSongTOPlayList";
 import HeadPhonesImage from "../assets/images/headphones.jpg";
 import Paper from "@mui/material/Paper";
 import InputBase from "@mui/material/InputBase";
 import IconButton from "@mui/material/IconButton";
-import createPlayList from "../helpers/createPlayList";
 import { useContext, useState } from "react";
-import getPlayListSongs from "../helpers/getPlayListSongs";
 import toast from "react-hot-toast";
 import { AppContext } from "../components/AppContext";
 
 export default function AddToPlayList() {
+  const spotifyApi = useRouteLoaderData("root");
   const playLists = useLoaderData();
   const navigate = useNavigate();
   const { songOnPlayer } = useContext(AppContext);
@@ -25,16 +23,15 @@ export default function AddToPlayList() {
 
   async function handleOnClick(selectedPlayList) {
     //get songs of selected playlist, check  if  song is on list if song is on list don't add
-    const songsOnPlayList = await getPlayListSongs({
-      playlistId: selectedPlayList.id,
-    });
+    const { items } = await spotifyApi.getPlaylistTracks(selectedPlayList.id);
+    const songsOnPlayList = items;
 
     if (songsOnPlayList.some((song) => song.track.uri === songToAdd)) {
       toast("Song is already on this list");
       return;
     }
 
-    await addSongToPlayList(selectedPlayList.id, songToAdd, "POST");
+    await spotifyApi.addTracksToPlaylist(selectedPlayList.id, [songToAdd]);
     navigate(`/library/${selectedPlayList.id}`);
   }
 
@@ -45,6 +42,7 @@ export default function AddToPlayList() {
 
   async function handleSubmit(event) {
     event.preventDefault();
+
     if (
       playLists.some(
         (list) => list.name.toUpperCase() === playListName.toUpperCase()
@@ -54,10 +52,14 @@ export default function AddToPlayList() {
       return;
     }
 
-    const playListId = await createPlayList(playListName);
-    await addSongToPlayList(playListId, songToAdd, "POST");
+    const userId = await spotifyApi.getMe();
+    const playList = await spotifyApi.createPlaylist(`${userId.id}`, {
+      name: playListName,
+    });
+
     setPlayListName("");
-    navigate(`/library/${playListId}`);
+    await spotifyApi.addTracksToPlaylist(playList.id, [songToAdd]);
+    navigate(`/library/${playList.id}`);
   }
 
   return (

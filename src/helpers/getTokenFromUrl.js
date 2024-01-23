@@ -1,3 +1,4 @@
+// This is part of the authentication code used to obtain a token from Spotify during login.
 export default function getTokenFromUrl() {
   return window.location.hash
     .substring(1)

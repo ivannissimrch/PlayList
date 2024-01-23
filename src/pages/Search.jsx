@@ -4,11 +4,13 @@ import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
 import { Box, Container } from "@mui/material";
 import { useState } from "react";
-import makeSpotifySearch from "../helpers/makeSpotifySearch";
+// import makeSpotifySearch from "../helpers/makeSpotifySearch";
 import SearchList from "../components/SearchList";
+import { useRouteLoaderData } from "react-router-dom";
 export default function SearchPage() {
   const [searchResults, setSearchResults] = useState("");
   const [songToSearch, setSongToSearch] = useState("");
+  const spotifyApi = useRouteLoaderData("root");
 
   function handleOnChange(event) {
     setSongToSearch(event.target.value);
@@ -16,10 +18,7 @@ export default function SearchPage() {
 
   async function handleSubmit(event) {
     event.preventDefault();
-    const results = await makeSpotifySearch(
-      `q=remaster%2520track%3ADoxy%2520artist%3A${songToSearch}&type=track`,
-      "GET"
-    );
+    const results = await spotifyApi.searchTracks(songToSearch);
     setSearchResults(results);
     setSongToSearch("");
   }
