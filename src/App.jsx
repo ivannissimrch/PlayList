@@ -4,35 +4,26 @@ import SearchPage from "./pages/Search";
 import LibraryPage from "./pages/Library";
 import RootLayout from "./pages/Root";
 import ErrorPage from "./pages/Error";
-import getPlayList from "./helpers/getPlayList";
+import getPlayList from "./helpers/loaders/getPlayList";
 import PlayListPage from "./pages/PlayListPage";
-import { useEffect, useState } from "react";
-import getTokenFromUrl from "./helpers/getTokenFromUrl";
 import Login from "./components/Login";
-import getPlayListSongs from "./helpers/getPlayListSongs";
+import getPlayListSongs from "./helpers/loaders/getPlayListSongs";
 import AddToPlayList from "./pages/AddToPlayList";
 import getSpotifyToken from "./helpers/getSpotifyToken";
+import SpotifyWebApi from "spotify-web-api-js";
+import rootLoader from "./helpers/loaders/rootLoader";
+const spotifyApi = new SpotifyWebApi();
 
 export default function App() {
-  const [spotifyToken, setSpotifyToken] = useState();
-  //get token
-  useEffect(() => {
-    const spotifyToken = getTokenFromUrl().access_token;
-    window.location.hash = ";";
-    if (spotifyToken) {
-      setSpotifyToken(spotifyToken);
-      //store spotify token on local storage
-      localStorage.setItem("token", spotifyToken);
-    }
-  }, []);
-
+  //get spotify token from local storage
+  const spotifyToken = getSpotifyToken();
   const router = createBrowserRouter([
     {
       path: "/",
       element: <RootLayout />,
-      errorElement: <ErrorPage />,
-      loader: getSpotifyToken,
+      loader: rootLoader,
       id: "root",
+      errorElement: <ErrorPage />,
       children: [
         {
           path: "",
@@ -41,17 +32,17 @@ export default function App() {
         { path: "search", element: <SearchPage /> },
         {
           path: "library",
-          loader: () => getPlayList(),
+          loader: () => getPlayList(spotifyApi),
           element: <LibraryPage />,
         },
         {
           path: "/library/:playlistId",
-          loader: ({ params }) => getPlayListSongs(params),
+          loader: ({ params }) => getPlayListSongs(params, spotifyApi),
           element: <PlayListPage />,
         },
         {
           path: "addToPlayList",
-          loader: () => getPlayList(),
+          loader: () => getPlayList(spotifyApi),
           element: <AddToPlayList />,
         },
       ],

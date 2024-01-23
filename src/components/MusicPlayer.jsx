@@ -6,7 +6,6 @@ import { AppContext } from "./AppContext";
 import { useNavigate } from "react-router-dom";
 
 export default function MusicPlayer() {
-  //maybe get this token from context provider?
   const token = getSpotifyToken();
   const { songOnPlayer } = useContext(AppContext);
   const navigate = useNavigate();

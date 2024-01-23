@@ -1,12 +1,13 @@
 import { Outlet } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { Toaster } from "react-hot-toast";
-import { useRouteLoaderData } from "react-router-dom";
 import { AppContextProvider } from "../components/AppContext";
+import getSpotifyToken from "../helpers/getSpotifyToken";
 
 // eslint-disable-next-line react/prop-types
 export default function RootLayout({ children }) {
-  const token = useRouteLoaderData("root");
+  //get token from local storage
+  const token = getSpotifyToken();
   return (
     <AppContextProvider>
       {children}
