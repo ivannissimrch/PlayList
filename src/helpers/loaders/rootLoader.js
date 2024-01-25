@@ -9,6 +9,8 @@ export default function rootLoader() {
     //store spotify token on local storage
     localStorage.setItem("token", spotifyToken);
     spotifyApi.setAccessToken(spotifyToken);
+  } else {
+    spotifyApi.setAccessToken(localStorage.getItem("token"));
   }
 
   return spotifyApi;
