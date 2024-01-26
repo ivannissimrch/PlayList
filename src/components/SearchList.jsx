@@ -7,7 +7,7 @@ import Avatar from "@mui/material/Avatar";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
-import { AppContext } from "./AppContext";
+import { AppContext } from "../App";
 
 export default function SearchList({ searchResultsSongs }) {
   const navigate = useNavigate();

@@ -1,13 +1,11 @@
 import { Card, Button } from "@mui/material";
 import SpotifyPlayer from "react-spotify-web-playback";
-import getSpotifyToken from "../helpers/getSpotifyToken";
 import { useContext } from "react";
-import { AppContext } from "./AppContext";
+import { AppContext } from "../App";
 import { useNavigate } from "react-router-dom";
 
 export default function MusicPlayer() {
-  const token = getSpotifyToken();
-  const { songOnPlayer } = useContext(AppContext);
+  const { songOnPlayer, spotifyApi } = useContext(AppContext);
   const navigate = useNavigate();
   function handleOnClick() {
     navigate("addToPlayList");
@@ -16,7 +14,7 @@ export default function MusicPlayer() {
   return (
     <Card sx={{ display: "flex", flexDirection: "column" }}>
       <SpotifyPlayer
-        token={token}
+        token={spotifyApi.getAccessToken()}
         uris={[songOnPlayer]}
         play="true"
         layout="responsive"

@@ -1,4 +1,4 @@
-import { useLoaderData, useRouteLoaderData } from "react-router-dom";
+import { useLoaderData } from "react-router-dom";
 import { Container } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -12,13 +12,12 @@ import InputBase from "@mui/material/InputBase";
 import IconButton from "@mui/material/IconButton";
 import { useContext, useState } from "react";
 import toast from "react-hot-toast";
-import { AppContext } from "../components/AppContext";
+import { AppContext } from "../App";
 
 export default function AddToPlayList() {
-  const spotifyApi = useRouteLoaderData("root");
   const playLists = useLoaderData();
   const navigate = useNavigate();
-  const { songOnPlayer } = useContext(AppContext);
+  const { songOnPlayer, spotifyApi } = useContext(AppContext);
   const songToAdd = songOnPlayer;
 
   async function handleOnClick(selectedPlayList) {

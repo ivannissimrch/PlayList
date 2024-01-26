@@ -9,20 +9,42 @@ import PlayListPage from "./pages/PlayListPage";
 import Login from "./components/Login";
 import getPlayListSongs from "./helpers/loaders/getPlayListSongs";
 import AddToPlayList from "./pages/AddToPlayList";
-import getSpotifyToken from "./helpers/getSpotifyToken";
 import SpotifyWebApi from "spotify-web-api-js";
-import rootLoader from "./helpers/loaders/rootLoader";
+import { createContext, useEffect, useState } from "react";
+import getTokenFromUrl from "./helpers/getTokenFromUrl";
+import getSpotifyToken from "./helpers/getSpotifyToken";
+//instance of the spotifyApi
 const spotifyApi = new SpotifyWebApi();
 
+export const AppContext = createContext();
+
 export default function App() {
-  //get spotify token from local storage
-  const spotifyToken = getSpotifyToken();
+  const [spotifyToken, setSpotifyToken] = useState(getSpotifyToken());
+  const [songOnPlayer, setSongOnPlayer] = useState(
+    "spotify:track:0puoT9566xTWBoRw8qDKxk"
+  );
+
+  function playSelectedSong(selectedSong) {
+    setSongOnPlayer(selectedSong);
+  }
+
+  useEffect(() => {
+    const spotifyToken = getTokenFromUrl().access_token;
+    window.location.hash = ";";
+    if (spotifyToken) {
+      //store spotify token on local storage
+      localStorage.setItem("token", spotifyToken);
+      setSpotifyToken(spotifyToken);
+      spotifyApi.setAccessToken();
+    } else {
+      spotifyApi.setAccessToken(getSpotifyToken());
+    }
+  }, []);
+
   const router = createBrowserRouter([
     {
       path: "/",
       element: <RootLayout />,
-      loader: rootLoader,
-      id: "root",
       errorElement: <ErrorPage />,
       children: [
         {
@@ -49,5 +71,9 @@ export default function App() {
     },
   ]);
 
-  return <RouterProvider router={router} />;
+  return (
+    <AppContext.Provider value={{ songOnPlayer, playSelectedSong, spotifyApi }}>
+      <RouterProvider router={router} />
+    </AppContext.Provider>
+  );
 }

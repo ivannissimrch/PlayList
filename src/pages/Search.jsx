@@ -3,14 +3,14 @@ import InputBase from "@mui/material/InputBase";
 import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
 import { Box, Container } from "@mui/material";
-import { useState } from "react";
-// import makeSpotifySearch from "../helpers/makeSpotifySearch";
+import { useContext, useState } from "react";
 import SearchList from "../components/SearchList";
-import { useRouteLoaderData } from "react-router-dom";
+import { AppContext } from "../App";
+
 export default function SearchPage() {
   const [searchResults, setSearchResults] = useState("");
   const [songToSearch, setSongToSearch] = useState("");
-  const spotifyApi = useRouteLoaderData("root");
+  const { spotifyApi } = useContext(AppContext);
 
   function handleOnChange(event) {
     setSongToSearch(event.target.value);
