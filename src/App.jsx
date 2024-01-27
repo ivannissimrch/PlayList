@@ -13,13 +13,15 @@ import SpotifyWebApi from "spotify-web-api-js";
 import { createContext, useEffect, useState } from "react";
 import getTokenFromUrl from "./helpers/getTokenFromUrl";
 import getSpotifyToken from "./helpers/getSpotifyToken";
-//instance of the spotifyApi
-const spotifyApi = new SpotifyWebApi();
 
 export const AppContext = createContext();
 
 export default function App() {
   const [spotifyToken, setSpotifyToken] = useState(getSpotifyToken());
+
+  const spotifyApi = new SpotifyWebApi();
+  spotifyApi.setAccessToken(getSpotifyToken());
+
   const [songOnPlayer, setSongOnPlayer] = useState(
     "spotify:track:0puoT9566xTWBoRw8qDKxk"
   );
@@ -29,15 +31,17 @@ export default function App() {
   }
 
   useEffect(() => {
-    const spotifyToken = getTokenFromUrl().access_token;
+    //get the token from the spofity Api server
+    const tokenFromApi = getTokenFromUrl().access_token;
     window.location.hash = ";";
-    if (spotifyToken) {
+    if (tokenFromApi) {
+      //this only runs when login
       //store spotify token on local storage
-      localStorage.setItem("token", spotifyToken);
-      setSpotifyToken(spotifyToken);
-      spotifyApi.setAccessToken();
+      localStorage.setItem("token", tokenFromApi);
+      setSpotifyToken(tokenFromApi);
     } else {
-      spotifyApi.setAccessToken(getSpotifyToken());
+      //Do i still need this code?
+      // setSpotifyToken(getSpotifyToken());
     }
   }, []);
 

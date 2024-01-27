@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function MusicPlayer() {
   const { songOnPlayer, spotifyApi } = useContext(AppContext);
+
   const navigate = useNavigate();
   function handleOnClick() {
     navigate("addToPlayList");
