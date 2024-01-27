@@ -17,10 +17,15 @@ import { AppContext } from "../App";
 export default function AddToPlayList() {
   const playLists = useLoaderData();
   const navigate = useNavigate();
-  const { songOnPlayer, spotifyApi } = useContext(AppContext);
-  const songToAdd = songOnPlayer;
+  const { getSongToAdd, spotifyApi } = useContext(AppContext);
+  const songToAdd = getSongToAdd();
 
   async function handleOnClick(selectedPlayList) {
+    // if (typeof songOnPlayer === "object") {
+    //   const songPlaying = await spotifyApi.getMe();
+    //   console.log(songPlaying);
+    // }
+
     //get songs of selected playlist, check  if  song is on list if song is on list don't add
     const { items } = await spotifyApi.getPlaylistTracks(selectedPlayList.id);
     const songsOnPlayList = items;

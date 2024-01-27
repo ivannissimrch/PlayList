@@ -18,32 +18,39 @@ export const AppContext = createContext();
 
 export default function App() {
   const [spotifyToken, setSpotifyToken] = useState(getSpotifyToken());
-
   const spotifyApi = new SpotifyWebApi();
-  spotifyApi.setAccessToken(getSpotifyToken());
-
-  const [songOnPlayer, setSongOnPlayer] = useState(
-    "spotify:track:0puoT9566xTWBoRw8qDKxk"
-  );
-
-  function playSelectedSong(selectedSong) {
-    setSongOnPlayer(selectedSong);
-  }
+  let songToAdd = "";
 
   useEffect(() => {
     //get the token from the spofity Api server
     const tokenFromApi = getTokenFromUrl().access_token;
     window.location.hash = ";";
     if (tokenFromApi) {
-      //this only runs when login
+      //this only runs the first time the app loads
       //store spotify token on local storage
       localStorage.setItem("token", tokenFromApi);
       setSpotifyToken(tokenFromApi);
-    } else {
-      //Do i still need this code?
-      // setSpotifyToken(getSpotifyToken());
     }
   }, []);
+  spotifyApi.setAccessToken(getSpotifyToken());
+
+  const [songOnPlayer, setSongOnPlayer] = useState([
+    "spotify:track:3d2J1W0Msqt6z0TkF0ywLk",
+    "spotify:track:3Xfg7AegXaDLoD5GOUMf2e",
+    "spotify:track:0puoT9566xTWBoRw8qDKxk",
+  ]);
+
+  async function playSelectedSong(selectedSong) {
+    setSongOnPlayer(selectedSong);
+  }
+
+  function updateSongToAdd(lastPlayingSong) {
+    songToAdd = lastPlayingSong;
+  }
+
+  function getSongToAdd() {
+    return songToAdd;
+  }
 
   const router = createBrowserRouter([
     {
@@ -76,7 +83,15 @@ export default function App() {
   ]);
 
   return (
-    <AppContext.Provider value={{ songOnPlayer, playSelectedSong, spotifyApi }}>
+    <AppContext.Provider
+      value={{
+        songOnPlayer,
+        playSelectedSong,
+        spotifyApi,
+        updateSongToAdd,
+        getSongToAdd,
+      }}
+    >
       <RouterProvider router={router} />
     </AppContext.Provider>
   );

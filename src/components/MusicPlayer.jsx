@@ -5,18 +5,21 @@ import { AppContext } from "../App";
 import { useNavigate } from "react-router-dom";
 
 export default function MusicPlayer() {
-  const { songOnPlayer, spotifyApi } = useContext(AppContext);
-
+  const { songOnPlayer, spotifyApi, updateSongToAdd } = useContext(AppContext);
+  const token = spotifyApi.getAccessToken();
   const navigate = useNavigate();
-  function handleOnClick() {
+
+  async function handleOnClick() {
+    const songToAdd = await spotifyApi.getMyCurrentPlayingTrack();
+    updateSongToAdd(songToAdd.item.uri);
     navigate("addToPlayList");
   }
 
   return (
     <Card sx={{ display: "flex", flexDirection: "column" }}>
       <SpotifyPlayer
-        token={spotifyApi.getAccessToken()}
-        uris={[songOnPlayer]}
+        token={token}
+        uris={songOnPlayer}
         play="true"
         layout="responsive"
         hideAttribution="true"
