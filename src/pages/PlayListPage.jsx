@@ -15,10 +15,15 @@ export default function PlayListPage() {
   const navigate = useNavigate();
   const { playlistId } = useParams();
   const { playSelectedSong, spotifyApi } = useContext(AppContext);
-
   const [songsOnPlayList, setSongsOnPlayList] = useState(songs);
 
-  function handleOnClick(selectedSong) {
+  function handlePlayAll() {
+    const listOfSongs = songs.map((song) => song.track.uri);
+    playSelectedSong(listOfSongs);
+    navigate("/");
+  }
+
+  function handlePlaySong(selectedSong) {
     playSelectedSong(selectedSong.track.uri);
     navigate("/");
   }
@@ -32,11 +37,21 @@ export default function PlayListPage() {
   }
 
   return (
-    <List dense sx={{ width: "100%", bgcolor: "background.paper" }}>
+    <List
+      dense
+      sx={{
+        width: "100%",
+        bgcolor: "background.paper",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
+      <Button onClick={handlePlayAll}>Play all</Button>
       {songsOnPlayList.map((song) => {
         return (
           <ListItem key={song.track.id}>
-            <ListItemButton onClick={() => handleOnClick(song)}>
+            <ListItemButton onClick={() => handlePlaySong(song)}>
               <ListItemAvatar>
                 <Avatar
                   variant="square"
