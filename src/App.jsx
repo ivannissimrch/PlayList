@@ -29,6 +29,7 @@ export default function App() {
       //this only runs the first time the app loads
       //store spotify token on local storage
       localStorage.setItem("token", tokenFromApi);
+      localStorage.setItem("navbarValue", 0);
       setSpotifyToken(tokenFromApi);
     }
   }, []);
