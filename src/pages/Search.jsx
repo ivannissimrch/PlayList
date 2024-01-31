@@ -6,21 +6,35 @@ import { Box, Container } from "@mui/material";
 import { useContext, useState } from "react";
 import SearchList from "../components/SearchList";
 import { AppContext } from "../App";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 export default function SearchPage() {
   const [searchResults, setSearchResults] = useState("");
   const [songToSearch, setSongToSearch] = useState("");
   const { spotifyApi } = useContext(AppContext);
+  const navigate = useNavigate();
 
   function handleOnChange(event) {
     setSongToSearch(event.target.value);
   }
 
   async function handleSubmit(event) {
-    event.preventDefault();
-    const results = await spotifyApi.searchTracks(songToSearch);
-    setSearchResults(results);
-    setSongToSearch("");
+    try {
+      event.preventDefault();
+      const results = await spotifyApi.searchTracks(songToSearch);
+      setSearchResults(results);
+      setSongToSearch("");
+    } catch (error) {
+      if (error.status === 401) {
+        toast("Token expired please login again");
+        localStorage.removeItem("token");
+        navigate("/");
+        window.location.reload();
+      }
+      console.log(error);
+      throw error;
+    }
   }
 
   return (

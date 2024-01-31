@@ -1,10 +1,10 @@
 import { Outlet } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { Toaster } from "react-hot-toast";
-import getSpotifyToken from "../helpers/getSpotifyToken";
+import localStorageToken from "../helpers/localStorageToken";
 
 export default function RootLayout() {
-  const spotifyToken = getSpotifyToken();
+  const spotifyToken = localStorageToken();
 
   return (
     <>

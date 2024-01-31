@@ -3,6 +3,7 @@ import SpotifyPlayer from "react-spotify-web-playback";
 import { useContext } from "react";
 import { AppContext } from "../App";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 export default function MusicPlayer() {
   const { songOnPlayer, spotifyApi, updateSongToAdd } = useContext(AppContext);
@@ -23,6 +24,13 @@ export default function MusicPlayer() {
         play="true"
         layout="responsive"
         hideAttribution="true"
+        callback={(state) => {
+          if (state.error === "Authentication failed") {
+            toast("Token expired please login again");
+            localStorage.removeItem("token");
+            window.location.reload();
+          }
+        }}
       />
       <Button onClick={handleOnClick}>Add to Playlist</Button>
     </Card>

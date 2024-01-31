@@ -12,12 +12,12 @@ import AddToPlayList from "./pages/AddToPlayList";
 import SpotifyWebApi from "spotify-web-api-js";
 import { createContext, useEffect, useState } from "react";
 import getTokenFromUrl from "./helpers/getTokenFromUrl";
-import getSpotifyToken from "./helpers/getSpotifyToken";
+import localStorageToken from "./helpers/localStorageToken";
 
 export const AppContext = createContext();
 
 export default function App() {
-  const [spotifyToken, setSpotifyToken] = useState(getSpotifyToken());
+  const [spotifyToken, setSpotifyToken] = useState(localStorageToken());
   const spotifyApi = new SpotifyWebApi();
   let songToAdd = "";
 
@@ -29,11 +29,10 @@ export default function App() {
       //this only runs the first time the app loads
       //store spotify token on local storage
       localStorage.setItem("token", tokenFromApi);
-      localStorage.setItem("navbarValue", 0);
       setSpotifyToken(tokenFromApi);
     }
   }, []);
-  spotifyApi.setAccessToken(getSpotifyToken());
+  spotifyApi.setAccessToken(localStorageToken());
 
   const [songOnPlayer, setSongOnPlayer] = useState([
     "spotify:track:3d2J1W0Msqt6z0TkF0ywLk",
