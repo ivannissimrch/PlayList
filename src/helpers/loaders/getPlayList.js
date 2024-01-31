@@ -1,4 +1,9 @@
 export default async function getPlayList(spotifyApi) {
-  const response = await spotifyApi.getUserPlaylists();
-  return response.items;
+  try {
+    const response = await spotifyApi.getUserPlaylists();
+    return response.items;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
 }

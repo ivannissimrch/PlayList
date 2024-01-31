@@ -1,4 +1,4 @@
-import { useLoaderData, useRouteLoaderData } from "react-router-dom";
+import { useLoaderData } from "react-router-dom";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
@@ -7,20 +7,23 @@ import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "@mui/material";
-import { useState } from "react";
-import { useContext } from "react";
-import { AppContext } from "../components/AppContext";
+import { useState, useContext } from "react";
+import { AppContext } from "../App";
 
 export default function PlayListPage() {
   const songs = useLoaderData();
   const navigate = useNavigate();
-  const spotifyApi = useRouteLoaderData("root");
   const { playlistId } = useParams();
-  const { playSelectedSong } = useContext(AppContext);
-
+  const { playSelectedSong, spotifyApi } = useContext(AppContext);
   const [songsOnPlayList, setSongsOnPlayList] = useState(songs);
 
-  function handleOnClick(selectedSong) {
+  function handlePlayAll() {
+    const listOfSongs = songs.map((song) => song.track.uri);
+    playSelectedSong(listOfSongs);
+    navigate("/");
+  }
+
+  function handlePlaySong(selectedSong) {
     playSelectedSong(selectedSong.track.uri);
     navigate("/");
   }
@@ -34,11 +37,21 @@ export default function PlayListPage() {
   }
 
   return (
-    <List dense sx={{ width: "100%", bgcolor: "background.paper" }}>
+    <List
+      dense
+      sx={{
+        width: "100%",
+        bgcolor: "background.paper",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
+      <Button onClick={handlePlayAll}>Play all</Button>
       {songsOnPlayList.map((song) => {
         return (
           <ListItem key={song.track.id}>
-            <ListItemButton onClick={() => handleOnClick(song)}>
+            <ListItemButton onClick={() => handlePlaySong(song)}>
               <ListItemAvatar>
                 <Avatar
                   variant="square"

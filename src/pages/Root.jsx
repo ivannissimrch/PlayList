@@ -1,19 +1,16 @@
 import { Outlet } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { Toaster } from "react-hot-toast";
-import { AppContextProvider } from "../components/AppContext";
-import getSpotifyToken from "../helpers/getSpotifyToken";
+import localStorageToken from "../helpers/localStorageToken";
 
-// eslint-disable-next-line react/prop-types
-export default function RootLayout({ children }) {
-  //get token from local storage
-  const token = getSpotifyToken();
+export default function RootLayout() {
+  const spotifyToken = localStorageToken();
+
   return (
-    <AppContextProvider>
-      {children}
-      {token && <Navbar />}
+    <>
+      {spotifyToken && <Navbar />}
       <Outlet />
       <Toaster />
-    </AppContextProvider>
+    </>
   );
 }

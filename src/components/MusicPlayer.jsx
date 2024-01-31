@@ -1,15 +1,18 @@
 import { Card, Button } from "@mui/material";
 import SpotifyPlayer from "react-spotify-web-playback";
-import getSpotifyToken from "../helpers/getSpotifyToken";
 import { useContext } from "react";
-import { AppContext } from "./AppContext";
+import { AppContext } from "../App";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 export default function MusicPlayer() {
-  const token = getSpotifyToken();
-  const { songOnPlayer } = useContext(AppContext);
+  const { songOnPlayer, spotifyApi, updateSongToAdd } = useContext(AppContext);
+  const token = spotifyApi.getAccessToken();
   const navigate = useNavigate();
-  function handleOnClick() {
+
+  async function handleOnClick() {
+    const songToAdd = await spotifyApi.getMyCurrentPlayingTrack();
+    updateSongToAdd(songToAdd.item.uri);
     navigate("addToPlayList");
   }
 
@@ -17,10 +20,17 @@ export default function MusicPlayer() {
     <Card sx={{ display: "flex", flexDirection: "column" }}>
       <SpotifyPlayer
         token={token}
-        uris={[songOnPlayer]}
+        uris={songOnPlayer}
         play="true"
         layout="responsive"
         hideAttribution="true"
+        callback={(state) => {
+          if (state.error === "Authentication failed") {
+            toast("Token expired please login again");
+            localStorage.removeItem("token");
+            window.location.reload();
+          }
+        }}
       />
       <Button onClick={handleOnClick}>Add to Playlist</Button>
     </Card>

@@ -1,16 +1,25 @@
-import { AppBar, Toolbar, Grid, Tabs, Tab } from "@mui/material";
+import { AppBar, Toolbar, Tabs, Tab } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
 import SearchIcon from "@mui/icons-material/Search";
 import LibraryMusicIcon from "@mui/icons-material/LibraryMusic";
 import LogoutIcon from "@mui/icons-material/Logout";
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
 export default function Navbar() {
-  const [value, setValue] = useState(0);
   const navigate = useNavigate();
+  const { pathname } = useLocation();
+  let reloadVal = 0;
+  if (pathname.startsWith("/") || pathname.startsWith(" ")) {
+    reloadVal = 0;
+  }
+  if (pathname.startsWith("/search")) {
+    reloadVal = 1;
+  }
+  if (pathname.startsWith("/library")) {
+    reloadVal = 2;
+  }
 
-  function handleOnClick() {
+  function handleLogout() {
     navigate("/");
     localStorage.removeItem("token");
     window.location.reload();
@@ -18,49 +27,59 @@ export default function Navbar() {
 
   return (
     <AppBar position="static">
-      <Toolbar>
-        <Grid container>
-          <Grid item xs={12}>
-            <Tabs
-              centered
-              value={value}
-              indicatorColor="secondary"
-              onChange={(event, newValue) => setValue(newValue)}
-            >
-              <Tab
-                label={
-                  <Link to="">
-                    <HomeIcon fontSize="large" sx={{ color: "white" }} />
-                  </Link>
-                }
-              />
-              <Tab
-                label={
-                  <Link to="search">
-                    <SearchIcon fontSize="large" sx={{ color: "white" }} />{" "}
-                  </Link>
-                }
-              />
-              <Tab
-                label={
-                  <Link to="library">
-                    <LibraryMusicIcon
-                      fontSize="large"
-                      sx={{ color: "white" }}
-                    />
-                  </Link>
-                }
-              />
-              <Tab
-                label={
-                  <Link to="/" onClick={handleOnClick}>
-                    <LogoutIcon fontSize="large" sx={{ color: "white" }} />
-                  </Link>
-                }
-              />
-            </Tabs>
-          </Grid>
-        </Grid>
+      <Toolbar
+        sx={{
+          p: 1,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Tabs
+          sx={{
+            p: 1,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexWrap: "wrap",
+          }}
+          centered
+          value={reloadVal}
+          indicatorColor="secondary"
+        >
+          <Tab
+            value={0}
+            label={
+              <Link to="">
+                <HomeIcon fontSize="large" sx={{ color: "white" }} />
+              </Link>
+            }
+          />
+          <Tab
+            value={1}
+            label={
+              <Link to="search">
+                <SearchIcon fontSize="large" sx={{ color: "white" }} />{" "}
+              </Link>
+            }
+          />
+          <Tab
+            value={2}
+            label={
+              <Link to="library">
+                <LibraryMusicIcon fontSize="large" sx={{ color: "white" }} />
+              </Link>
+            }
+          />
+          <Tab
+            value={3}
+            label={
+              <Link to="/" onClick={handleLogout}>
+                <LogoutIcon fontSize="large" sx={{ color: "white" }} />
+              </Link>
+            }
+          />
+        </Tabs>
       </Toolbar>
     </AppBar>
   );

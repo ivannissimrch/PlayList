@@ -9,20 +9,53 @@ import PlayListPage from "./pages/PlayListPage";
 import Login from "./components/Login";
 import getPlayListSongs from "./helpers/loaders/getPlayListSongs";
 import AddToPlayList from "./pages/AddToPlayList";
-import getSpotifyToken from "./helpers/getSpotifyToken";
 import SpotifyWebApi from "spotify-web-api-js";
-import rootLoader from "./helpers/loaders/rootLoader";
-const spotifyApi = new SpotifyWebApi();
+import { createContext, useEffect, useState } from "react";
+import getTokenFromUrl from "./helpers/getTokenFromUrl";
+import localStorageToken from "./helpers/localStorageToken";
+
+export const AppContext = createContext();
 
 export default function App() {
-  //get spotify token from local storage
-  const spotifyToken = getSpotifyToken();
+  const [spotifyToken, setSpotifyToken] = useState(localStorageToken());
+  const spotifyApi = new SpotifyWebApi();
+  let songToAdd = "";
+
+  useEffect(() => {
+    //get the token from the spofity Api server
+    const tokenFromApi = getTokenFromUrl().access_token;
+    window.location.hash = ";";
+    if (tokenFromApi) {
+      //this only runs the first time the app loads
+      //store spotify token on local storage
+      localStorage.setItem("token", tokenFromApi);
+      setSpotifyToken(tokenFromApi);
+    }
+  }, []);
+  spotifyApi.setAccessToken(localStorageToken());
+
+  const [songOnPlayer, setSongOnPlayer] = useState([
+    "spotify:track:3d2J1W0Msqt6z0TkF0ywLk",
+    "spotify:track:3Xfg7AegXaDLoD5GOUMf2e",
+    "spotify:track:0puoT9566xTWBoRw8qDKxk",
+  ]);
+
+  async function playSelectedSong(selectedSong) {
+    setSongOnPlayer(selectedSong);
+  }
+
+  function updateSongToAdd(lastPlayingSong) {
+    songToAdd = lastPlayingSong;
+  }
+
+  function getSongToAdd() {
+    return songToAdd;
+  }
+
   const router = createBrowserRouter([
     {
       path: "/",
       element: <RootLayout />,
-      loader: rootLoader,
-      id: "root",
       errorElement: <ErrorPage />,
       children: [
         {
@@ -49,5 +82,17 @@ export default function App() {
     },
   ]);
 
-  return <RouterProvider router={router} />;
+  return (
+    <AppContext.Provider
+      value={{
+        songOnPlayer,
+        playSelectedSong,
+        spotifyApi,
+        updateSongToAdd,
+        getSongToAdd,
+      }}
+    >
+      <RouterProvider router={router} />
+    </AppContext.Provider>
+  );
 }

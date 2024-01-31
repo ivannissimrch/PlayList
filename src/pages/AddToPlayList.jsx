@@ -1,4 +1,4 @@
-import { useLoaderData, useRouteLoaderData } from "react-router-dom";
+import { useLoaderData } from "react-router-dom";
 import { Container } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -12,27 +12,35 @@ import InputBase from "@mui/material/InputBase";
 import IconButton from "@mui/material/IconButton";
 import { useContext, useState } from "react";
 import toast from "react-hot-toast";
-import { AppContext } from "../components/AppContext";
+import { AppContext } from "../App";
 
 export default function AddToPlayList() {
-  const spotifyApi = useRouteLoaderData("root");
   const playLists = useLoaderData();
   const navigate = useNavigate();
-  const { songOnPlayer } = useContext(AppContext);
-  const songToAdd = songOnPlayer;
+  const { getSongToAdd, spotifyApi } = useContext(AppContext);
+  const songToAdd = getSongToAdd();
 
   async function handleOnClick(selectedPlayList) {
-    //get songs of selected playlist, check  if  song is on list if song is on list don't add
-    const { items } = await spotifyApi.getPlaylistTracks(selectedPlayList.id);
-    const songsOnPlayList = items;
+    try {
+      //get songs of selected playlist, check  if  song is on the list, if the song is on list, don't add
+      const { items } = await spotifyApi.getPlaylistTracks(selectedPlayList.id);
+      const songsOnPlayList = items;
 
-    if (songsOnPlayList.some((song) => song.track.uri === songToAdd)) {
-      toast("Song is already on this list");
-      return;
+      if (songsOnPlayList.some((song) => song.track.uri === songToAdd)) {
+        toast("Song is already on this list");
+        return;
+      }
+
+      await spotifyApi.addTracksToPlaylist(selectedPlayList.id, [songToAdd]);
+      navigate(`/library/${selectedPlayList.id}`);
+    } catch (error) {
+      if (error.status === 401) {
+        toast("Token expired please login again");
+        localStorage.removeItem("token");
+        navigate("/");
+        window.location.reload();
+      }
     }
-
-    await spotifyApi.addTracksToPlaylist(selectedPlayList.id, [songToAdd]);
-    navigate(`/library/${selectedPlayList.id}`);
   }
 
   const [playListName, setPlayListName] = useState("");
@@ -41,25 +49,34 @@ export default function AddToPlayList() {
   }
 
   async function handleSubmit(event) {
-    event.preventDefault();
+    try {
+      event.preventDefault();
 
-    if (
-      playLists.some(
-        (list) => list.name.toUpperCase() === playListName.toUpperCase()
-      )
-    ) {
-      toast("Cannot use this name");
-      return;
+      if (
+        playLists.some(
+          (list) => list.name.toUpperCase() === playListName.toUpperCase()
+        )
+      ) {
+        toast("Cannot use this name");
+        return;
+      }
+
+      const userId = await spotifyApi.getMe();
+      const playList = await spotifyApi.createPlaylist(`${userId.id}`, {
+        name: playListName,
+      });
+
+      setPlayListName("");
+      await spotifyApi.addTracksToPlaylist(playList.id, [songToAdd]);
+      navigate(`/library/${playList.id}`);
+    } catch (error) {
+      if (error.status === 401) {
+        toast("Token expired please login again");
+        localStorage.removeItem("token");
+        navigate("/");
+        window.location.reload();
+      }
     }
-
-    const userId = await spotifyApi.getMe();
-    const playList = await spotifyApi.createPlaylist(`${userId.id}`, {
-      name: playListName,
-    });
-
-    setPlayListName("");
-    await spotifyApi.addTracksToPlaylist(playList.id, [songToAdd]);
-    navigate(`/library/${playList.id}`);
   }
 
   return (
