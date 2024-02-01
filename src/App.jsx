@@ -14,14 +14,17 @@ import { createContext, useEffect, useState } from "react";
 import getTokenFromUrl from "./helpers/getTokenFromUrl";
 import localStorageToken from "./helpers/localStorageToken";
 
+const spotifyApi = new SpotifyWebApi();
+
 export const AppContext = createContext();
 
 export default function App() {
   const [spotifyToken, setSpotifyToken] = useState(localStorageToken());
-  const spotifyApi = new SpotifyWebApi();
   let songToAdd = "";
+  spotifyApi.setAccessToken(localStorageToken());
 
   useEffect(() => {
+    console.log("use Efect");
     //get the token from the spofity Api server
     const tokenFromApi = getTokenFromUrl().access_token;
     window.location.hash = ";";
@@ -32,7 +35,6 @@ export default function App() {
       setSpotifyToken(tokenFromApi);
     }
   }, []);
-  spotifyApi.setAccessToken(localStorageToken());
 
   const [songOnPlayer, setSongOnPlayer] = useState([
     "spotify:track:3d2J1W0Msqt6z0TkF0ywLk",
