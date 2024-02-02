@@ -24,7 +24,6 @@ export default function App() {
   spotifyApi.setAccessToken(localStorageToken());
 
   useEffect(() => {
-    console.log("use Efect");
     //get the token from the spofity Api server
     const tokenFromApi = getTokenFromUrl().access_token;
     window.location.hash = ";";

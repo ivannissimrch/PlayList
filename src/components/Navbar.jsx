@@ -8,15 +8,15 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 export default function Navbar() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  let reloadVal = 0;
+  let currentTabValue = 0;
   if (pathname.startsWith("/") || pathname.startsWith(" ")) {
-    reloadVal = 0;
+    currentTabValue = 0;
   }
   if (pathname.startsWith("/search")) {
-    reloadVal = 1;
+    currentTabValue = 1;
   }
   if (pathname.startsWith("/library")) {
-    reloadVal = 2;
+    currentTabValue = 2;
   }
 
   function handleLogout() {
@@ -44,7 +44,7 @@ export default function Navbar() {
             flexWrap: "wrap",
           }}
           centered
-          value={reloadVal}
+          value={currentTabValue}
           indicatorColor="secondary"
         >
           <Tab
