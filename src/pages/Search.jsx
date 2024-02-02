@@ -31,9 +31,9 @@ export default function SearchPage() {
         localStorage.removeItem("token");
         navigate("/");
         window.location.reload();
+      } else {
+        throw error;
       }
-      console.log(error);
-      throw error;
     }
   }
 

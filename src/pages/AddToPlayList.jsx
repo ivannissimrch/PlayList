@@ -39,6 +39,8 @@ export default function AddToPlayList() {
         localStorage.removeItem("token");
         navigate("/");
         window.location.reload();
+      } else {
+        throw error;
       }
     }
   }
@@ -75,6 +77,8 @@ export default function AddToPlayList() {
         localStorage.removeItem("token");
         navigate("/");
         window.location.reload();
+      } else {
+        throw error;
       }
     }
   }
