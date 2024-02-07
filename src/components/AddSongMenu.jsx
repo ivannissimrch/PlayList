@@ -27,7 +27,12 @@ export default function AddSongMenu() {
   });
   const [playListName, setPlayListName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const fetchingData = <CircularProgress />;
+  const fetchingData = (
+    <Fragment>
+      <CircularProgress />
+      <Typography variant="h6">Creating new playlist</Typography>
+    </Fragment>
+  );
 
   useEffect(() => {
     async function fetchPlayList() {
@@ -106,6 +111,7 @@ export default function AddSongMenu() {
   function handleNewPlaylistInputChange(event) {
     setPlayListName(event.target.value);
   }
+
   async function handleSubmit(event) {
     try {
       event.preventDefault();
@@ -119,6 +125,8 @@ export default function AddSongMenu() {
         )
       ) {
         toast("Cannot use this name");
+        setIsLoading(false);
+        setState((prev) => ({ ...prev, bottom: false }));
         return;
       }
 
@@ -132,6 +140,7 @@ export default function AddSongMenu() {
       const playListData = await spotifyApi.getUserPlaylists();
       setPlayLists(playListData.items);
       setIsLoading(false);
+      toast("Song Added to Playlist");
       setState((prev) => ({ ...prev, bottom: false }));
     } catch (error) {
       if (error.status === 401) {
@@ -146,55 +155,51 @@ export default function AddSongMenu() {
 
   return (
     <Fragment>
-      {isLoading && fetchingData}
-      {!isLoading && (
-        <Fragment>
-          <Button onClick={toggleDrawer("bottom", true)}>
-            <MoreVertIcon />
-          </Button>
-          <Drawer
-            anchor={"bottom"}
-            open={state["bottom"]}
-            onClose={toggleDrawer("bottom", false)}
+      <Button onClick={toggleDrawer("bottom", true)}>
+        <MoreVertIcon />
+      </Button>
+      <Drawer
+        anchor={"bottom"}
+        open={state["bottom"]}
+        onClose={toggleDrawer("bottom", false)}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            height: "100%",
+            padding: 2,
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+            }}
           >
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "flex-start",
-                justifyContent: "flex-start",
-                flexWrap: "wrap",
-                padding: 2,
-              }}
-            >
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  width: "100%",
-                }}
-              >
-                <Typography variant="h5">Add To PlayList</Typography>
-                <Button onClick={toggleDrawer("bottom", false)}>
-                  <CancelIcon />
-                </Button>
-              </Box>
-              <Paper component="form" onSubmit={handleSubmit}>
-                <InputBase
-                  sx={{ ml: 1, flex: 1 }}
-                  placeholder="Create playlist and add song"
-                  inputProps={{ "aria-label": "Create new playlist" }}
-                  onChange={handleNewPlaylistInputChange}
-                  value={playListName}
-                />
-              </Paper>
-              <Typography variant="h6">Save in</Typography>
-              <Box>{list("bottom")}</Box>
-            </Box>
-          </Drawer>
-        </Fragment>
-      )}
+            <Typography variant="h5">Add To PlayList</Typography>
+
+            <Button onClick={toggleDrawer("bottom", false)}>
+              <CancelIcon />
+            </Button>
+          </Box>
+          <Paper component="form" onSubmit={handleSubmit}>
+            <InputBase
+              sx={{ ml: 1, flex: 1 }}
+              placeholder="Create playlist and add song"
+              inputProps={{ "aria-label": "Create new playlist" }}
+              onChange={handleNewPlaylistInputChange}
+              value={playListName}
+            />
+          </Paper>
+          <Typography variant="h6">Save in</Typography>
+          {isLoading && fetchingData}
+          {!isLoading && <Box>{list("bottom")}</Box>}
+        </Box>
+      </Drawer>
     </Fragment>
   );
 }
