@@ -103,7 +103,7 @@ export default function AddSongMenu() {
     }
   }
 
-  function handleOnChange(event) {
+  function handleNewPlaylistInputChange(event) {
     setPlayListName(event.target.value);
   }
   async function handleSubmit(event) {
@@ -185,7 +185,7 @@ export default function AddSongMenu() {
                   sx={{ ml: 1, flex: 1 }}
                   placeholder="Create playlist and add song"
                   inputProps={{ "aria-label": "Create new playlist" }}
-                  onChange={handleOnChange}
+                  onChange={handleNewPlaylistInputChange}
                   value={playListName}
                 />
               </Paper>
