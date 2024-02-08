@@ -36,8 +36,18 @@ export default function AddSongMenu() {
 
   useEffect(() => {
     async function fetchPlayList() {
-      const playListData = await spotifyApi.getUserPlaylists();
-      setPlayLists(playListData.items);
+      try {
+        const playListData = await spotifyApi.getUserPlaylists();
+        setPlayLists(playListData.items);
+      } catch (error) {
+        if (error.status === 401) {
+          toast("Token expired please login again");
+          localStorage.removeItem("token");
+          window.location.reload();
+        } else {
+          throw error;
+        }
+      }
     }
     fetchPlayList();
   }, [spotifyApi]);
@@ -126,6 +136,7 @@ export default function AddSongMenu() {
       ) {
         toast("Cannot use this name");
         setIsLoading(false);
+        setPlayListName("");
         setState((prev) => ({ ...prev, bottom: false }));
         return;
       }
@@ -135,10 +146,10 @@ export default function AddSongMenu() {
         name: playListName,
       });
 
-      setPlayListName("");
       await spotifyApi.addTracksToPlaylist(playList.id, [songToAdd]);
       const playListData = await spotifyApi.getUserPlaylists();
       setPlayLists(playListData.items);
+      setPlayListName("");
       setIsLoading(false);
       toast("Song Added to Playlist");
       setState((prev) => ({ ...prev, bottom: false }));
