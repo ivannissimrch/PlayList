@@ -18,6 +18,7 @@ import { useContext, useState, useEffect, Fragment } from "react";
 import { AppContext } from "../App";
 import toast from "react-hot-toast";
 import CancelIcon from "@mui/icons-material/Cancel";
+import { handleExpiredToken } from "../helpers/handleExpiredToken";
 
 export default function AddSongMenu() {
   const { spotifyApi } = useContext(AppContext);
@@ -27,7 +28,7 @@ export default function AddSongMenu() {
   });
   const [playListName, setPlayListName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const fetchingData = (
+  const showFetchingDataMessage = (
     <Fragment>
       <CircularProgress />
       <Typography variant="h6">Creating new playlist</Typography>
@@ -40,13 +41,7 @@ export default function AddSongMenu() {
         const playListData = await spotifyApi.getUserPlaylists();
         setPlayLists(playListData.items);
       } catch (error) {
-        if (error.status === 401) {
-          toast("Token expired please login again");
-          localStorage.removeItem("token");
-          window.location.reload();
-        } else {
-          throw error;
-        }
+        handleExpiredToken(error);
       }
     }
     fetchPlayList();
@@ -70,25 +65,27 @@ export default function AddSongMenu() {
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <List>
-        {playLists.map((list) => (
-          <ListItem
-            key={list.id}
-            disablePadding
-            onClick={() => handleListItemclick(list)}
-          >
-            <ListItemButton>
-              <ListItemAvatar>
-                <Avatar
-                  alt={`{list.name}`}
-                  src={list.images[0] ? list.images[0].url : ""}
-                  variant="square"
-                />
-              </ListItemAvatar>
+        {playLists.map((list) => {
+          return (
+            <ListItem
+              key={list.id}
+              disablePadding
+              onClick={() => handleListItemclick(list)}
+            >
+              <ListItemButton>
+                <ListItemAvatar>
+                  <Avatar
+                    alt={`{list.name}`}
+                    src={list.images[0] ? list.images[0].url : ""}
+                    variant="square"
+                  />
+                </ListItemAvatar>
 
-              <ListItemText primary={list.name} />
-            </ListItemButton>
-          </ListItem>
-        ))}
+                <ListItemText primary={list.name} />
+              </ListItemButton>
+            </ListItem>
+          );
+        })}
       </List>
     </Box>
   );
@@ -108,13 +105,7 @@ export default function AddSongMenu() {
       await spotifyApi.addTracksToPlaylist(selectedPlayList.id, [songToAdd]);
       toast("Song Added to Playlist");
     } catch (error) {
-      if (error.status === 401) {
-        toast("Token expired please login again");
-        localStorage.removeItem("token");
-        window.location.reload();
-      } else {
-        throw error;
-      }
+      handleExpiredToken(error);
     }
   }
 
@@ -154,13 +145,7 @@ export default function AddSongMenu() {
       toast("Song Added to Playlist");
       setState((prev) => ({ ...prev, bottom: false }));
     } catch (error) {
-      if (error.status === 401) {
-        toast("Token expired please login again");
-        localStorage.removeItem("token");
-        window.location.reload();
-      } else {
-        throw error;
-      }
+      handleExpiredToken(error);
     }
   }
 
@@ -207,7 +192,7 @@ export default function AddSongMenu() {
             />
           </Paper>
           <Typography variant="h6">Save in</Typography>
-          {isLoading && fetchingData}
+          {isLoading && showFetchingDataMessage}
           {!isLoading && <Box>{list("bottom")}</Box>}
         </Box>
       </Drawer>
