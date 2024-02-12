@@ -8,7 +8,6 @@ import getPlayList from "./helpers/loaders/getPlayList";
 import PlayListPage from "./pages/PlayListPage";
 import Login from "./components/Login";
 import getPlayListSongs from "./helpers/loaders/getPlayListSongs";
-import AddToPlayList from "./pages/AddToPlayList";
 import SpotifyWebApi from "spotify-web-api-js";
 import { createContext, useEffect, useState } from "react";
 import getTokenFromUrl from "./helpers/getTokenFromUrl";
@@ -23,6 +22,12 @@ export default function App() {
   let songToAdd = "";
   spotifyApi.setAccessToken(localStorageToken());
 
+  const [songOnPlayer, setSongOnPlayer] = useState([
+    "spotify:track:3d2J1W0Msqt6z0TkF0ywLk",
+    "spotify:track:3Xfg7AegXaDLoD5GOUMf2e",
+    "spotify:track:0puoT9566xTWBoRw8qDKxk",
+  ]);
+
   useEffect(() => {
     //get the token from the spofity Api server
     const tokenFromApi = getTokenFromUrl().access_token;
@@ -34,12 +39,6 @@ export default function App() {
       setSpotifyToken(tokenFromApi);
     }
   }, []);
-
-  const [songOnPlayer, setSongOnPlayer] = useState([
-    "spotify:track:3d2J1W0Msqt6z0TkF0ywLk",
-    "spotify:track:3Xfg7AegXaDLoD5GOUMf2e",
-    "spotify:track:0puoT9566xTWBoRw8qDKxk",
-  ]);
 
   async function playSelectedSong(selectedSong) {
     setSongOnPlayer(selectedSong);
@@ -73,11 +72,6 @@ export default function App() {
           path: "/library/:playlistId",
           loader: ({ params }) => getPlayListSongs(params, spotifyApi),
           element: <PlayListPage />,
-        },
-        {
-          path: "addToPlayList",
-          loader: () => getPlayList(spotifyApi),
-          element: <AddToPlayList />,
         },
       ],
     },

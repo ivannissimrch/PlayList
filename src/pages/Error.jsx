@@ -5,12 +5,11 @@ import Login from "../components/Login";
 
 export default function ErrorPage() {
   const error = useRouteError();
-  // let tokenExpired = false;
+  let isTokenValid = true;
   let message = "Error Ocurred";
   if (error.status === 401) {
     localStorage.removeItem("token");
-    // tokenExpired = true;
-    //TODO write code to hide navbar
+    isTokenValid = false;
     message = (
       <>
         <Typography textAlign="center" variant="h5">
@@ -24,7 +23,7 @@ export default function ErrorPage() {
   }
   return (
     <div>
-      <Navbar />
+      {isTokenValid && <Navbar />}
       <Container fluid>
         <Card>
           <CardContent>{message}</CardContent>
