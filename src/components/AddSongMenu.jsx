@@ -20,7 +20,8 @@ import toast from "react-hot-toast";
 import CancelIcon from "@mui/icons-material/Cancel";
 import { handleExpiredToken } from "../helpers/handleExpiredToken";
 
-export default function AddSongMenu() {
+// eslint-disable-next-line react/prop-types
+export default function AddSongMenu({ currentSong }) {
   const { spotifyApi } = useContext(AppContext);
   const [playLists, setPlayLists] = useState([]);
   const [state, setState] = useState({
@@ -39,13 +40,26 @@ export default function AddSongMenu() {
     async function fetchPlayList() {
       try {
         const playListData = await spotifyApi.getUserPlaylists();
-        setPlayLists(playListData.items);
+        console.log(currentSong);
+        //modyfing the playLists to include the songs on the playlist
+        const playlistAndSongs = await Promise.all(
+          playListData.items.map(async (list) => {
+            const { items } = await spotifyApi.getPlaylistTracks(list.id);
+            const songsOnPlayList = items;
+            return { ...list, songsOnPlayList };
+          })
+        );
+        setPlayLists(playlistAndSongs);
+        //modyfing the playLists to include the songs on the playlist
+
+        console.log(playlistAndSongs);
       } catch (error) {
+        console.log(error);
         handleExpiredToken(error);
       }
     }
     fetchPlayList();
-  }, [spotifyApi]);
+  }, [spotifyApi, currentSong]);
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (
@@ -66,6 +80,10 @@ export default function AddSongMenu() {
     >
       <List>
         {playLists.map((list) => {
+          const included = list.songsOnPlayList.some(
+            (list) => list.track.uri === currentSong
+          );
+          if (included) console.log("included");
           return (
             <ListItem
               key={list.id}
@@ -82,6 +100,7 @@ export default function AddSongMenu() {
                 </ListItemAvatar>
 
                 <ListItemText primary={list.name} />
+                {included && <ListItemText primary="Song is already on list" />}
               </ListItemButton>
             </ListItem>
           );
@@ -93,6 +112,7 @@ export default function AddSongMenu() {
   async function handleListItemclick(selectedPlayList) {
     try {
       const song = await spotifyApi.getMyCurrentPlayingTrack();
+      console.log(song);
       const songToAdd = song.item.uri;
       const { items } = await spotifyApi.getPlaylistTracks(selectedPlayList.id);
       const songsOnPlayList = items;

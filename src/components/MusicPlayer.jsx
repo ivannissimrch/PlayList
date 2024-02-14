@@ -4,10 +4,12 @@ import { useContext } from "react";
 import { AppContext } from "../App";
 import toast from "react-hot-toast";
 import AddSongMenu from "./AddSongMenu";
+import { useState } from "react";
 
 export default function MusicPlayer() {
   const { songOnPlayer, spotifyApi } = useContext(AppContext);
   const token = spotifyApi.getAccessToken();
+  const [currentSong, setCurrentSong] = useState("");
 
   return (
     <Card
@@ -33,6 +35,7 @@ export default function MusicPlayer() {
           layout="responsive"
           hideAttribution="true"
           callback={(state) => {
+            setCurrentSong(state.track.uri);
             if (state.error === "Authentication failed") {
               toast("Token expired please login again");
               localStorage.removeItem("token");
@@ -41,7 +44,7 @@ export default function MusicPlayer() {
           }}
         />
         <Box>
-          <AddSongMenu />
+          <AddSongMenu currentSong={currentSong} />
         </Box>
       </Box>
     </Card>

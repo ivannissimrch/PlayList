@@ -1,18 +1,34 @@
 # Playlist App
 
-The app allows you to create and store playlists on your Spotify account.
-Also, it provides a built-in music player to play the music right within the app.
+The Playlist App allows you to create and store playlists on your Spotify account. It also provides a built-in music player to play the music right within the app.
 
-How it Works:
-The app links to your Spotify account, enabling you to access your music library and playlist data.
-The app uses two libraries for interaction:
-react-spotify-web-playback: This library gives you a music player component, allowing you to play, pause, skip, and control songs within the app.
-spotify-web-api: JS wrapper for the Spotify Web API This library includes helper functions for all Spotify's endpoints, enabling actions like creating playlists, adding/removing songs, and fetching playlist information.
+## How it Works
 
-The app manages the current song on the music player using React Context and shares this information across different components on the app, ensuring everything stays in sync. Also,
-A Loader on Root is used to create an instance of the SpotifyAPI from the spotify-web-api, which is then accessible to child components of the app. This allows the components to use methods from the spotify-web-api library to make fetch requests to the Spotify API.
+The app links to your Spotify account, enabling you to access your music library and playlist data. It uses two libraries for interaction:
 
-Documentation for the spotify-web-api library: https://jmperezperez.com/spotify-web-api-js/#src-spotify-web-api.js-constr.prototype.addtrackstoplaylist
+- `react-spotify-web-playback`: This library gives you a music player component, allowing you to play, pause, skip, and control songs within the app.
+- `spotify-web-api`: JS wrapper for the Spotify Web API. This library includes helper functions for all Spotify's endpoints, enabling actions like creating playlists, adding/removing songs, and fetching playlist information.
 
-react-spotify-web-playback:
-https://www.npmjs.com/package/@chrisuh10/react-spotify-web-playback
+The app manages the current song on the music player using React Context and shares this information across different components on the app, ensuring everything stays in sync.
+
+## Documentation
+
+- Documentation for the `spotify-web-api` library: [https://jmperezperez.com/spotify-web-api-js/#src-spotify-web-api.js-constr.prototype.addtrackstoplaylist](https://jmperezperez.com/spotify-web-api-js/#src-spotify-web-api.js-constr.prototype.addtrackstoplaylist)
+- Documentation for `react-spotify-web-playback`: [https://www.npmjs.com/package/@chrisuh10/react-spotify-web-playback](https://www.npmjs.com/package/@chrisuh10/react-spotify-web-playback)
+
+## How to Install
+
+1. Sign up for a Spotify Developers account.
+2. Create an app and specify that it will use the Web API and Web Playback SDK.
+3. In the redirect URIs, enter `http://localhost:8888/callback`.
+4. To use this app, you need to be a Spotify Premium subscriber.
+5. Download this repository.
+6. In the `authorization` folder, open a terminal and install dependencies with `npm i`.
+7. In the `playlist` folder, open a terminal and install dependencies with `yarn`.
+8. Copy your client ID and client secret and enter them in the `app.js` file inside the authorization code:
+
+```javascript
+var client_id = ""; // your clientId
+var client_secret = ""; // Your secret
+var redirect_uri = "http://localhost:8888/callback"; // Your redirect uri
+```
