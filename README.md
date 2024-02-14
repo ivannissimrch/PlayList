@@ -32,3 +32,13 @@ var client_id = ""; // your clientId
 var client_secret = ""; // Your secret
 var redirect_uri = "http://localhost:8888/callback"; // Your redirect uri
 ```
+
+To run the app, follow these steps:
+
+1. Open the `authorization` folder in a terminal.
+2. Type `npm run start` to start the authorization server.
+
+3. Open another terminal in the `playlist` folder.
+4. Type `yarn dev` to start the playlist app.
+
+Make sure to run the authorization server first before starting the playlist app.
